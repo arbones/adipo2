@@ -1,0 +1,75 @@
+---
+title: "Meet the Group"
+listing:
+  - id: pi
+    include: 
+      people_group: "pi"
+    exclude:
+      external: true
+    template: ../_ejs/people-box.ejs
+    type: grid
+    fields: [title, subtitle, image, education]
+  - id: researcher
+    include: 
+      people_group: "researcher"
+    exclude:
+      external: true
+    template: ../_ejs/people-box.ejs
+    sort: last
+    type: grid
+    fields: [title, subtitle, image, education]
+  - id: clinical
+    include: 
+      people_group: "clinical"
+    exclude:
+      external: true
+    template: ../_ejs/people-box.ejs
+    sort: last    
+    type: grid
+    fields: [title, subtitle, image, education]
+  - id: post-bac
+    include: 
+      people_group: "post-bac"
+    exclude:
+      external: true
+    template: ../_ejs/people-box.ejs
+    sort: last
+    type: grid
+    fields: [title, subtitle, image, education]
+page-layout: full
+---
+
+
+## Principal Investigators
+
+
+::: {#pi}
+:::
+
+
+:::{.sand-background}
+## Research Scientists
+
+
+
+::: {#researcher}
+:::
+
+:::
+
+## Clinical Scientists
+
+::: {#clinical}
+:::
+
+:::{.sand-background}
+
+
+:::
+
+## Post Baccalaureate Researchers
+
+::: {#post-bac}
+:::
+
+

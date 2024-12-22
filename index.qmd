@@ -1,0 +1,9 @@
+
+
+##### Welcome to the website of the ADIPOcyte and FAT biology Lab.
+
+* We study adipocyte biology and its role in health and disease. Collaborating with basic and clinical researchers, we focus on the pathophysiological effects of obesity, particularly the metabolic dysfunction-associated steatotic liver disease (MASLD) and its progression to liver cancer. 
+* Our work aims to identify biomarkers and develop approaches for personalized medicine, addressing the challenges faced by obese patients and the professionals who care for them. 
+* We apply advanced omics technologies and AI tools, including large language models (LLMs), to improve our understanding and find practical solutions.
+
+![](img/DALLe.png){height=600}

@@ -1,0 +1,34 @@
+---
+title: &TITLE Carmen Casamayor-Franco
+first: Carmen
+last: Casamayor Franco
+people_group: "clinical"
+affiliation: 
+  - Miguel Servet University Hospital <br> Instituto de Investigación Sanitaria Aragón
+education: 
+  - Ph.D. Medicine | University of Zaragoza | 1993 <br> M.D. | University of Zaragoza | 2002
+subtitle: "Attending Surgeon <br> Head of the Bariatric and Metabolic Surgery Unit"
+image: avatar.jpg
+page-layout: full
+description: ""
+about: 
+  id: about
+  template: trestles
+  image-shape: round
+  image: avatar.jpg
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:menchucasamayor@gmail.com 
+---
+
+<hr>
+
+
+:::{#about}
+
+## Education
+{{< meta education >}}
+
+## Affiliations
+{{< meta affiliation >}}

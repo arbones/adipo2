@@ -1,0 +1,36 @@
+---
+title: &TITLE Mapi García-Sobreviela
+last: García Sobreviela
+first: Mapi
+subtitle: "Lab Manager"
+affiliation: 
+  - Instituto de Investigación Sanitaria Aragón
+people_group: "researcher"
+email: "mpgarciaso.adipofat@gmail.com"
+education:
+  - Superior Laboratory Technician<br>Specialization Chemical Analysis and Control | 2003 
+description: ""
+image: avatar.jpg
+page-layout: full
+about: 
+  id: about
+  template: trestles
+  image-shape: round
+  image: avatar.jpg
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:mpgarciaso.adipofat@gmail.com 
+---
+
+<hr>
+
+
+:::{#about}
+
+## Education
+{{< meta education >}}
+
+
+## Affiliations
+{{< meta affiliation >}}

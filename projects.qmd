@@ -1,0 +1,54 @@
+---
+title: Current Projects
+toc: true
+---
+
+# The Fat expandibility (FATe).
+
+Obesity, characterized by excessive fat accumulation, poses health risks. Subcutaneous adipose tissue can expand during positive energy balance, but once its expansion capacity is exceeded, ectopic lipid deposition occurs in other organs. One prevalent comorbidity of obesity is intrahepatic lipid accumulation, as seen in metabolic dysfunction-associated steatotic liver disease (MASLD, formerly NAFLD).
+
+![](img/expand.png)
+
+This project builds on the group's primary research, initiated under the [FATe Project](https://cardiab.biomedcentral.com/articles/10.1186/s12933-015-0203-6){target="_blank"}, which studied adipose tissue expandability and aimed to identify non-invasive biomarkers for expansion limits and obesity-related complications. The initial study identified factors limiting subcutaneous adipose tissue expansion and __stratified obese patients__ using biomarker-based predictive models ([FASEB. 2022](https://faseb.onlinelibrary.wiley.com/doi/epdf/10.1096/fj.202200118RR)). Mesenchymal stem cell lines from diverse phenotypes were characterized.
+
+Then, the team focused on using CRISPR/Cas9 __gene-editing technology__ to modify mesenchymal stem cells from adipose tissue, enhancing their functionality and differentiation into adipocytes with increased expansion capacity. Our results suggested that improving adipocyte expandability could reduce intrahepatic fat accumulation and offer therapeutic potential for NAFLD ([Am J Physiol Cell Physiol. 2023](https://journals.physiology.org/doi/full/10.1152/ajpcell.00291.2023?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org&checkFormatAccess=true)).
+
+Moreover, given the limitations of traditional metrics like BMI and waist circumference in assessing obesity-related risks, we demonstrated that the SC/VIS fat ratio is a more effective metric for distinguishing metabolic health profiles. We identified ISM1 as a promising non-invasive biomarker, showing strong correlations with fat distribution, serum adipokines, and glucose regulation, highlighting its potential for improved obesity risk assessment ([Cardiovascular Diabetol. 2023](https://cardiab.biomedcentral.com/articles/10.1186/s12933-023-02075-0)).
+
+:::column-margin
+![](img/ism4.png)
+:::
+
+We mantain a continuously expanding cohort with over 500 individuals with obesity recruited since 2013 as part of the FATe Project. Participants undergo comprehensive characterization and have donated adipose tissue (subcutaneous and visceral), DNA, blood, and liver biopsies. Mesenchymal stem cells from the adipose tissue have been used to establish cell cultures. Omics techniques, including bulk and single-nuclei RNA sequencing, miRNA analysis, and exome sequencing, have been applied to selected subgroups.   
+__This cohort actively supports the group’s research projects and would be available for national and international collaborations.__
+
+```{=html}
+<div  style="margin: 30px; text-align: center;">
+<a class="btn btn-primary" href="https://arbones.shinyapps.io/shiny_FATe_v05/" role="button" target="_blank" style="padding: 15px 30px;">Interactive view of the patients´characteristics and available samples within the cohort</a>
+</div>
+```
+
+----
+
+# New biomarkers for MASLD and hepatocellular carcinoma (HCC)
+
+Metabolic dysfunction-associated steatotic liver disease (MASLD), a widespread condition, encompasses a spectrum from simple steatosis ("fatty liver") to steatohepatitis (SH). SH can escalate into non-alcoholic steatohepatitis (MASH), which may further progress to advanced fibrosis (cirrhosis), hepatocellular carcinoma (HCC), and liver failure. The prevalence of MASLD is expected to rise due to the global obesity epidemic driven by sedentary lifestyles and poor dietary habits.
+
+Liver biopsy is the gold standard for evaluating MASLD stages but has significant limitations. It carries risks of complications, sampling variability, and limited representativeness due to the small tissue area analyzed. Moreover, it is unsuitable for long-term dynamic monitoring of fibrosis. Consequently, developing reliable non-invasive methods to stage MASLD is critical for tracking disease progression and guiding therapy. While various non-invasive models combining clinical and routine lab analytes have been proposed, their diagnostic value remains controversial.
+
+Over recent years, gene expression profiling of human cells and tissues has advanced the understanding of molecular mechanisms and potential predictive biomarkers for metabolic diseases such as obesity and diabetes. While several studies have sought genetic profiles to differentiate MASLD stages, hepatic transcriptomic biomarkers specific to detecting MASH and predicting its progression remain untested in clinical practice. Limitations include small sample sizes, lack of replication cohorts, insufficient focus on transcriptional differences between steatosis and advanced fibrosis, and challenges in translating candidate genes into standard clinical assays.
+
+Our team is engaged in two national projects funded by the Instituto de Salud Carlos III: a consortium in the personalized medicine framework (PMP21/00094) and a single-center initiative (PI22/01366). These aim to develop innovative methodologies combining gene expression analyses with advanced statistical techniques to create non-invasive biomarkers for tracking MASLD progression and identifying patients at high risk for HCC. These efforts focus on:
+
+::: column-margin
+![](img/insti/ISCIII.png)
+:::
+1. Enhancing understanding of the molecular mechanisms underlying liver diseases.
+2. Proposing new therapeutic targets for drug development.
+3. Identifying transcriptional patterns specific to fibrosis, shedding light on the molecular drivers of inflammation and prefibrotic states.
+
+We will integrate transcriptomic data with established predictors (e.g., FIB-4, APRI, NFS) and advanced computational methods, including AI, to refine biomarker discovery. Particular attention will be given to genes encoding secreted proteins, aiming to create accessible and scalable diagnostic tools for early detection and therapeutic interventions.
+
+This approach seeks to bridge current gaps in MASLD management, facilitating early diagnosis, risk stratification, and improved clinical outcomes for patients at risk of progressing to HCC.
+
+

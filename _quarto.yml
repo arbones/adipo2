@@ -1,0 +1,65 @@
+# This file controls the settings for your Quarto template 
+
+# website settings
+website:
+  
+  # start of the navigation bar at the top of the website
+  navbar:
+    pinned: true
+    search: false
+    logo: /img/adipofat.png
+    
+    # your sub-pages
+    left:
+      - text: "Projects"
+        href: projects.qmd
+      - text: "Publications"
+        href: pubs.qmd
+      - text: "Crew"
+        href: people/index.qmd
+    
+    
+    right:
+      - icon: github
+        href: https://github.com/arbones
+      - icon: envelope
+        aria-label: email
+        href: "mailto:adipofat@gmail.com"  
+  
+ 
+  page-footer: 
+    left: |
+      <span class="faux-block">&#169; 2025 JM Arbones-Mainar<br>CC BY-SA 4.0</span>
+    center: 
+      - text: "![](img/insti/IACS.png){hight=50}"
+        href: https://www.iacs.es/investigacion/grupos-de-investigacion/biologia-del-tejido-adiposo-complicaciones-metabolicas-la-obesidad-adipofat/
+      
+    right: 
+      - text: "![](img/insti/iisa.png){width=220}"
+        href: https://www.iisaragon.es/grupos-de-investigacion/cardiovascular-metabolismo-y-nutricion/giis065-adipofat-biologia-del-tejido-adiposo-y-complicaciones-metabolicas-de-la-obesidad/
+  
+project:
+  type: website
+  output-dir: docs
+
+  preview: 
+    port: 22222
+    browser: true
+    watch-inputs: true
+    navigate: true
+
+execute:
+  freeze: true
+
+format:
+  html:
+    fontsize: 1.1em
+    theme: 
+      - pulse
+      - html/styles.scss
+    toc: false
+    code-link: true
+    anchor-sections: true
+    fig-cap-location: margin
+    reference-location: margin
+    footnotes-hover: true

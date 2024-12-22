@@ -1,0 +1,42 @@
+---
+title: &TITLE Vanesa Bernal-Monterde
+last: Bernal Monterde
+first: Vanesa
+people_group: "pi"
+email: "vbernalm@gmail.com"
+education:
+  - Ph.D. Medicine | University of Zaragoza | 2010 <br> M.D. Medicine | University of Zaragoza | 2004 
+affiliation: 
+  - Miguel Servet University Hospital<br>Instituto de Investigación Sanitaria Aragón
+subtitle: "Attending Physician <br> Clinical Scientist <br> Liver Unit <br> GI department"
+description: ""
+project: "dmref"
+image: avatar.jpg
+page-layout: full
+about: 
+  id: about
+  template: trestles
+  image-shape: round
+  image: avatar.jpg
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:vbernalm@gmail.com
+---
+
+<hr>
+
+
+:::{#about}
+
+Clinical co-PI of the AdipoFat group and head of clinical trials.
+
+
+
+## Education
+{{< meta education >}}
+
+## Affiliations
+{{< meta affiliation >}}
+
+

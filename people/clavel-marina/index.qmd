@@ -1,0 +1,35 @@
+---
+title: &TITLE Marina Clavel-Millan
+last: Clavel Millan
+first: Marina
+affiliation: 
+  - Instituto de Investigación Sanitaria Aragón
+people_group: "post-bac"
+email: "rdelmoral.iacs@aragon.es"
+education:
+  - M.Sc. in Hospital Pharmaceutical Sciences | CEU Cardenal Herrera University | 2024 <br> Pharm.D. | University of Alacalá | 2021
+description: ""
+image: avatar.jpg
+page-layout: full
+about: 
+  id: about
+  template: trestles
+  image-shape: round
+  image: avatar.jpg
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:mclavelm@gmail.com 
+---
+
+<hr>
+
+
+:::{#about}
+
+## Education
+{{< meta education >}}
+
+
+## Affiliations
+{{< meta affiliation >}}

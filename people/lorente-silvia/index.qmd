@@ -1,0 +1,36 @@
+---
+title: &TITLE Silvia Lorente-Cebrian
+last: Lorente Cebrian
+first: Silvia
+subtitle: "Tenured Professor"
+affiliation: 
+  - Universidad de Zaragoza<br>Instituto de Investigación Sanitaria Aragón
+people_group: "researcher"
+email: "mrb179@uw.edu"
+education:
+  - Ph.D. Pharmacy | University of Navarra | Year <br> Pharm.D. | University of Navarra | Year 
+description: ""
+image: avatar.jpg
+page-layout: full
+about: 
+  id: about
+  template: trestles
+  image-shape: round
+  image: avatar.jpg
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:mrb179@uw.edu 
+---
+
+<hr>
+
+
+:::{#about}
+
+## Education
+{{< meta education >}}
+
+
+## Affiliations
+{{< meta affiliation >}}

@@ -1,0 +1,118 @@
+---
+title: "PUBLICATIONS"
+editor_options: 
+  chunk_output_type: console
+execute: 
+  echo: false
+---
+
+```{r}
+library(easyPubMed)
+library(xml2)
+
+# Define your query
+my_query <- "(Arbones-Mainar[Author] OR Lopez-Yus[Author]) AND 2011:3000[dp]"
+
+# Get PubMed IDs
+pmid_list <- get_pubmed_ids(my_query)
+
+# Fetch records in XML format
+pubmed_xml <- fetch_pubmed_data(pmid_list)
+
+# Parse with xml2
+doc <- read_xml(pubmed_xml)
+
+# Extract each article
+articles <- xml_find_all(doc, "//PubmedArticle")
+
+# Create an empty data frame
+results <- data.frame(
+  authors = character(),
+  title   = character(),
+  journal = character(),
+  vol     = character(),
+  page    = character(),
+  year    = character(),
+  stringsAsFactors = FALSE
+)
+
+# Loop over articles
+for (art in articles) {
+  # Year
+  year_node <- xml_find_first(art, ".//PubDate/Year")
+  year_val <- if (!is.na(xml_text(year_node))) {
+    xml_text(year_node)
+  } else {
+    # Some records only have 'MedlineDate' (e.g. "2021 Jan")
+    alt_node <- xml_find_first(art, ".//PubDate/MedlineDate")
+    yr <- xml_text(alt_node)
+    if (!is.na(yr) && nchar(yr) >= 4) substring(yr, 1, 4) else NA
+  }
+
+  # Authors (concatenate all authors in one string)
+   auths <- xml_find_all(art, ".//Author")
+  names_vec <- c()
+    for (a in auths) {
+    last_name <- xml_text(xml_find_first(a, ".//LastName"))
+    if (is.na(last_name)) last_name <- ""
+  
+    initials <- xml_text(xml_find_first(a, ".//Initials"))
+    if (is.na(initials)) initials <- ""
+  
+    if (nzchar(last_name) || nzchar(initials)) {
+    names_vec <- c(names_vec, paste(last_name, initials))
+  }
+}
+authors_str <- paste(names_vec, collapse = ", ")
+
+
+  # Title
+  title_node <- xml_find_first(art, ".//ArticleTitle")
+  title_val  <- if (!is.na(xml_text(title_node))) xml_text(title_node) else ""
+
+  # Journal name
+  journal_node <- xml_find_first(art, ".//Journal/Title")
+  journal_val  <- if (!is.na(xml_text(journal_node))) xml_text(journal_node) else ""
+
+  # Volume
+  volume_node <- xml_find_first(art, ".//JournalIssue/Volume")
+  volume_val  <- if (!is.na(xml_text(volume_node))) xml_text(volume_node) else ""
+
+  # Pages
+  page_node <- xml_find_first(art, ".//Pagination/MedlinePgn")
+  page_val  <- if (!is.na(xml_text(page_node))) xml_text(page_node) else ""
+
+  # Add row
+  new_row <- data.frame(
+    authors = authors_str,
+    title   = title_val,
+    journal = journal_val,
+    vol     = volume_val,
+    page    = page_val,
+    year    = year_val,
+    stringsAsFactors = FALSE
+  )
+  results <- rbind(results, new_row)
+}
+
+# Remove rows without a proper year
+results <- subset(results, !is.na(year) & year != "")
+
+# Sort years in descending order
+unique_years <- sort(unique(results$year), decreasing = TRUE)
+
+```
+
+```{r, results='asis'}
+
+for (yr in unique_years) {
+  cat("####", yr, "\n\n")
+  pubs <- results[results$year == yr, ]
+  for (i in seq_len(nrow(pubs))) {
+    cat( pubs$title[i], pubs$authors[i], "<br>")
+    cat(pubs$journal[i],". ", pubs$vol[i],"; ", pubs$page[i], "\n\n")
+    cat("\n")  # Blank line to separate from the next article
+  }
+  cat("\n")
+}
+```

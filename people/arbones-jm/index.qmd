@@ -1,0 +1,52 @@
+---
+title: &TITLE Jose M. Arbones-Mainar
+last: Arbones-Mainar
+first: Jose M.
+people_group: "pi"
+email: "jmarbones.iacs@aragon.es"
+education:
+  - M.Sc. Omics Data Analysis | University of Vic | 2024 <br> Ph.D. Medicine | University of Zaragoza | 2005 <br> B.S. Biochemistry & Molecular and cellular biology | University of Zaragoza | 2005 <br> Pharm.D. | University of Navarra |1997
+affiliation: 
+  - Instituto Aragonés de Ciencias de la Salud<br>Instituto de Investigación Sanitaria Aragón<br>CIBER Fisiopatología de la Obesidad y Nutrición
+subtitle: "Senior Scientist"
+description: ""
+project: "dmref"
+image: avatar.png
+page-layout: full
+about: 
+  id: about
+  template: trestles
+  image-shape: round
+  image: avatar.png
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:jmarbones.iacs@aragon.es
+    - text: Google Scholar
+      icon: mortarboard 
+      href: https://scholar.google.es/citations?user=zyb--60AAAAJ&hl=en
+    - text: Linkedin
+      icon: linkedin 
+      href: https://www.linkedin.com/in/arbones/
+    - icon: github
+      text: GitHub 
+      href: https://github.com/arbones
+---
+
+<hr>
+
+
+:::{#about}
+
+Current head of the AdipoFat group in the Translational Research Unit at the Miguel Servet University Hospital (Zaragoza, Spain).
+
+* Miguel Servet fellow funded by the Health Institute Carlos III (Madrid. Spain).
+* Marie Curie fellow funded by the European Commission.
+
+## Education
+{{< meta education >}}
+
+## Affiliations
+{{< meta affiliation >}}
+
+
