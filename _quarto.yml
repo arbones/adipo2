@@ -21,7 +21,7 @@ website:
     
     right:
       - icon: github
-        href: https://github.com/arbones
+        href: https://github.com/arbones/adipo2
       - icon: envelope
         aria-label: email
         href: "mailto:adipofat@gmail.com"  
