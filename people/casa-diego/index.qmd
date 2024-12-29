@@ -1,0 +1,40 @@
+---
+title: &TITLE Diego Casas-Deza
+first: Diego
+last: Casas Deza
+people_group: "clinical"
+affiliation: 
+  -  GI Department <br> Miguel Servet University Hospital <br> Instituto de Investigación Sanitaria Aragón
+education: 
+  - Ph.D. Medicine | University of Zaragoza | 2023 <br> M.D. | University of Zaragoza | 2016
+subtitle: "Attending Physician <br> GI Department <br> Juan Rodés Researcher (ISCIII)"
+image: avatar.jpg
+page-layout: full
+description: "  Rio Hortega Researcher (ISCIII) | 2022-2023 <br> "
+about: 
+  id: about
+  template: trestles
+  image-shape: round
+  image: avatar.jpg
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:diegocasas8@gmail.com 
+    - icon: orcid
+      text: ORCID
+      href: https://orcid.org/0000-0001-6883-8940
+---
+
+<hr>
+
+
+:::{#about}
+
+Active member of the Spanish Working Group on Crohn's Disease and Ulcerative Colitis and the Spanish Association of Gastroenterology, with special interest in the field of Inflammatory Bowel Disease and the impact of nutritional alterations in digestive diseases <br>
+
+## Education
+<br> M.Sc. in Biosimilars | University of Alcalá | 2021 <br> M.Sc Emergencies in Gastroenterology and Hepatology | Universidad a Distancia de Madrid | 2019 <br> M.Sc Introduction to Medical Research | University of Zaragoza | 2018 <br> M.Sc in Clinical Medicine | Camilo José Cela University | 2017<br>
+{{< meta education >}}
+
+## Affiliations
+{{< meta affiliation >}}
