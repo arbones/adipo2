@@ -10,17 +10,20 @@ email: "rdelmoral.iacs@aragon.es"
 education:
   - Ph.D. in Sociology of Public and Social Policies | University of Zaragoza | 2019 <br> B.S. Biochemistry & Molecular and cellular biology | University of Zaragoza | 2010 <br> B.S. Biology | Complutense University of Madrid | 2005
 description: ""
-image: avatar.jpg
+image: fotoRAQUEL.png
 page-layout: full
 about: 
   id: about
   template: trestles
   image-shape: round
-  image: avatar.jpg
+  image: fotoRAQUEL.png
   links:
     - icon: envelope
       text: Email
-      href: mailto:rdelmoral.iacs@aragon.es 
+      href: mailto:rdelmoral.iacs@aragon.es
+    - icon: orcid
+      text: ORCID
+      href: https://orcid.org/0000-0002-0914-5578  
 ---
 
 <hr>

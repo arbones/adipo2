@@ -8,7 +8,7 @@ affiliation:
 people_group: "researcher"
 email: "mpgarciaso.adipofat@gmail.com"
 education:
-  - Superior Laboratory Technician<br>Specialization Chemical Analysis and Control | 2003 
+  - Superior Laboratory Technician<br>Specialization:<br>Clinical & Biomedical Laboratory | 2022<br> Chemical Analysis & Control | 2003 
 description: ""
 image: avatar.jpg
 page-layout: full
@@ -20,7 +20,10 @@ about:
   links:
     - icon: envelope
       text: Email
-      href: mailto:mpgarciaso.adipofat@gmail.com 
+      href: mailto:mpgarciaso.adipofat@gmail.com
+    - icon: orcid
+      text: ORCID
+      href: https://orcid.org/0000-0001-5485-8983  
 ---
 
 <hr>

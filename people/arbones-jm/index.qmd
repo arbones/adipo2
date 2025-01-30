@@ -11,13 +11,13 @@ affiliation:
 subtitle: "Senior Scientist"
 description: ""
 project: "dmref"
-image: avatar.png
+image: avatar.jpg
 page-layout: full
 about: 
   id: about
   template: trestles
   image-shape: round
-  image: avatar.png
+  image: avatar.jpg
   links:
     - icon: envelope
       text: Email

@@ -9,6 +9,7 @@ execute:
 ```{r}
 library(easyPubMed)
 library(xml2)
+library(stringr)
 
 # Define your query
 my_query <- "(Arbones-Mainar[Author] OR Lopez-Yus[Author]) AND 2011:3000[dp]"
@@ -86,7 +87,7 @@ authors_str <- paste(names_vec, collapse = ", ")
   new_row <- data.frame(
     authors = authors_str,
     title   = title_val,
-    journal = journal_val,
+    journal = str_to_title(journal_val),
     vol     = volume_val,
     page    = page_val,
     year    = year_val,
@@ -110,7 +111,7 @@ for (yr in unique_years) {
   pubs <- results[results$year == yr, ]
   for (i in seq_len(nrow(pubs))) {
     cat( pubs$title[i], pubs$authors[i], "<br>")
-    cat(pubs$journal[i],". ", pubs$vol[i],"; ", pubs$page[i], "\n\n")
+    cat(pubs$journal[i],". Vol (", pubs$vol[i],"); ", pubs$page[i], "\n\n", sep = "")
     cat("\n")  # Blank line to separate from the next article
   }
   cat("\n")

@@ -7,7 +7,7 @@ affiliation:
 people_group: "post-bac"
 email: "rdelmoral.iacs@aragon.es"
 education:
-  - M.Sc. in Hospital Pharmaceutical Sciences | CEU Cardenal Herrera University | 2024 <br> Pharm.D. | University of Alacalá | 2021
+  - M.Sc. Bioinformatics | International University of Valencia | 2025 <br> M.Sc. in Hospital Pharmaceutical Sciences | CEU Cardenal Herrera University | 2024 <br> Pharm.D. | University of Alcalá | 2021
 description: ""
 image: avatar.jpg
 page-layout: full
@@ -19,7 +19,13 @@ about:
   links:
     - icon: envelope
       text: Email
-      href: mailto:mclavelm@gmail.com 
+      href: mailto:mclavelm@gmail.com
+    - icon: orcid
+      text: ORCID
+      href: https://orcid.org/0009-0003-6065-5017
+    - text: Linkedin
+      icon: linkedin 
+      href: https://www.linkedin.com/in/marina-clavel-millan/  
 ---
 
 <hr>

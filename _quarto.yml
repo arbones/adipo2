@@ -31,7 +31,7 @@ website:
     left: |
       <span class="faux-block">&#169; 2025 JM Arbones-Mainar<br>CC BY-SA 4.0</span>
     center: 
-      - text: "![](img/insti/IACS.png){hight=50}"
+      - text: "![](img/insti/IACSnuevo.png){hight=50}"
         href: https://www.iacs.es/investigacion/grupos-de-investigacion/biologia-del-tejido-adiposo-complicaciones-metabolicas-la-obesidad-adipofat/
       
     right: 
