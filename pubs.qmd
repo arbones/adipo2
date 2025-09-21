@@ -13,7 +13,7 @@ library(xml2)
 library(stringr)
 
 # Define your query
-my_query <- "((Arbones-Mainar[Author] OR Lopez-Yus[Author] OR Casas-Deza[Author]) AND (2011:3000[dp])) OR ((Bernal-Monterde[Author]) AND (2020:3000[dp])) OR ( 40246043[PMID] OR 38876834[PMID]"
+my_query <- "((Arbones-Mainar[Author] OR Lopez-Yus[Author] OR Casas-Deza[Author]) AND (2011:3000[dp])) OR ((Bernal-Monterde[Author]) AND (2020:3000[dp])) OR ( 40246043[PMID] OR 38876834[PMID] OR 40210079[PMID] OR 38403068[PMID] OR 37633519[PMID] OR 31203153[PMID])"
 
 # Get PubMed IDs
 pmid_list <- get_pubmed_ids(my_query)
