@@ -5,10 +5,10 @@ first: Vanesa
 people_group: "pi"
 email: "vbernalm@gmail.com"
 education:
-  - Ph.D. Medicine | University of Zaragoza | 2010 <br> M.D. Medicine | University of Zaragoza | 2004 
+  - M.Sc. Hepatology | University of Alcala & University Autonoma of Madrid | 2014 <br> Ph.D. Medicine | University of Zaragoza | 2010 <br> M.D. Medicine | University of Zaragoza | 2004 
 affiliation: 
-  - Miguel Servet University Hospital<br>Instituto de Investigación Sanitaria Aragón
-subtitle: "Attending Physician <br> Clinical Scientist <br> Liver Unit <br> GI department"
+  - Miguel Servet University Hospital<br>Instituto de Investigación Sanitaria Aragón<br>Board member of Asociación Española para el Estudio del Hígado (AEEH)
+subtitle: "Attending Physician <br> Clinical Scientist <br> Liver Unit -GI department <br> Associate Professor - University of Zaragoza"
 description: ""
 project: "dmref"
 image: avatar.jpg
