@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.36">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -36,7 +36,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-01c78b5cd655e4cd89133cf59d535862.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-f3ab317cd8911de575af389506b2d4b9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -161,13 +161,41 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-subtitle','listing-image','listing-education',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-reading-time-sort'] },{ data: ['listing-word-count-sort'] }],
+      valueNames: ['listing-title','listing-subtitle','listing-image','listing-education',{ data: ['index'] },{ data: ['categories'] }],
       
-      searchColumns: ["listing-website","listing-project","listing-execute","listing-format","listing-language","listing-title","listing-last","listing-first","listing-affiliation","listing-people_group","listing-email","listing-education","listing-description","listing-image","listing-page-layout","listing-about","listing-path","listing-outputHref","listing-author","listing-filename","listing-file-modified","listing-reading-time","listing-word-count"],
+      searchColumns: [],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
     window['quarto-listings']['listing-post-bac'] = new List('listing-post-bac', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-former .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-subtitle','listing-image','listing-education',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-file-modified-sort'] },{ data: ['listing-reading-time-sort'] },{ data: ['listing-word-count-sort'] }],
+      
+      searchColumns: ["listing-website","listing-project","listing-execute","listing-format","listing-language","listing-title","listing-last","listing-first","listing-affiliation","listing-people_group","listing-email","listing-education","listing-description","listing-image","listing-page-layout","listing-about","listing-path","listing-outputHref","listing-author","listing-filename","listing-file-modified","listing-reading-time","listing-word-count","listing-subtitle"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-former'] = new List('listing-former', options);
 
     if (window['quarto-listing-loaded']) {
       window['quarto-listing-loaded']();
@@ -243,6 +271,10 @@ window.Quarto = {
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://arbones.github.io/"> 
+<span class="menu-text"><img src="img/blog_icon.png" style="height:40px; margin-top:-3px;"></span></a>
+  </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/arbones/adipo2"> <i class="bi bi-github" role="img">
 </i> 
@@ -491,22 +523,22 @@ No matching items
       
       
       
-      <a href="../people/delmoral-raquel/index.html" role="button" class="quarto-grid-link">
+      <a href="../people/martinez-ana/index.html" role="button" class="quarto-grid-link">
         <div class="quarto-grid-item card h-100 card-left">
           
           
           <p class="card-img-top">
-            <img alt="Raquel del Moral-Bergós" src="../people/delmoral-raquel/fotoRAQUEL.png" class="thumbnail-image card-img listing-box-image" style="height" 150px;"="">
+            <img alt="Ana Martínez Martínez" src="../people/martinez-ana/avatar.jpg" class="thumbnail-image card-img listing-box-image" style="height" 150px;"="">
           </p>
           
           <div class="card-body post-contents">
             
             <div class="listing-box-title">
-              Raquel del Moral-Bergós<br> 
+              Ana Martínez Martínez<br> 
             </div>
                
             <div class="listing-box-subtitle">
-              Staff Scientist<br>
+              Assistant Professor |<br>
             </div>
                 
             
@@ -514,7 +546,7 @@ No matching items
               <div class="listing-box-education">
                 
                 
-                  Ph.D. in Sociology of Public and Social Policies | University of Zaragoza | 2019 <br> B.S. Biochemistry &amp; Molecular and cellular biology | University of Zaragoza | 2010 <br> B.S. Biology | Complutense University of Madrid | 2005<br>
+                  Ph.D. Medicine | University of Zaragoza | 2016 <br> M.S. Biochemistry &amp; Molecular and cellular biology | University of Zaragoza | 2012 <br> B.S. Biochemistry | University of Zaragoza | 2006<br>
                   
                     
               </div>  
@@ -645,9 +677,9 @@ No matching items
 
 </div>
 </section>
-<section id="post-baccalaureate-researchers" class="level2">
-<h2 class="anchored" data-anchor-id="post-baccalaureate-researchers">Post Baccalaureate Researchers</h2>
-<div id="listing-post-bac" class="quarto-listing quarto-listing-container-custom">
+<section id="former-members" class="level2">
+<h2 class="anchored" data-anchor-id="former-members">Former members</h2>
+<div id="listing-former" class="quarto-listing quarto-listing-container-custom">
 
 <div class="quarto-listing quarto-listing-container-grid">
   
@@ -696,6 +728,49 @@ No matching items
       
     </div>
   
+     
+    
+    <div class="g-col-1 listing-box">
+      
+      
+      
+      <a href="../people/delmoral-raquel/index.html" role="button" class="quarto-grid-link">
+        <div class="quarto-grid-item card h-100 card-left">
+          
+          
+          <p class="card-img-top">
+            <img alt="Raquel del Moral-Bergós" src="../people/delmoral-raquel/fotoRAQUEL.png" class="thumbnail-image card-img listing-box-image" style="height" 150px;"="">
+          </p>
+          
+          <div class="card-body post-contents">
+            
+            <div class="listing-box-title">
+              Raquel del Moral-Bergós<br> 
+            </div>
+               
+            <div class="listing-box-subtitle">
+              Staff Scientist<br>
+            </div>
+                
+            
+              
+              <div class="listing-box-education">
+                
+                
+                  Ph.D. in Sociology of Public and Social Policies | University of Zaragoza | 2019 <br> B.S. Biochemistry &amp; Molecular and cellular biology | University of Zaragoza | 2010 <br> B.S. Biology | Complutense University of Madrid | 2005<br>
+                  
+                    
+              </div>  
+                  
+
+            
+            
+          </div>  
+        </div>  
+      </a>
+      
+    </div>
+  
     
   
 </div>
@@ -710,7 +785,21 @@ No matching items
 
 </section>
 
-</main> <!-- /main -->
+<div class="quarto-listing quarto-listing-container-custom" id="listing-post-bac">
+
+<div class="quarto-listing quarto-listing-container-grid">
+  
+  <div class="list grid quarto-listing-cols-3"> 
+
+    
+  
+</div>
+</div>
+
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

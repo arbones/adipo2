@@ -1,0 +1,41 @@
+---
+title: &TITLE Ana Martínez Martínez
+last: Martínez Martínez
+first: Ana
+subtitle: "Assistant Professor |"
+affiliation: 
+  - University of Zaragoza
+people_group: "researcher"
+email: "martinez.anika@gmail.com"
+education:
+  - Ph.D. Medicine | University of Zaragoza | 2016 <br> M.S. Biochemistry & Molecular and cellular biology | University of Zaragoza | 2012 <br> B.S. Biochemistry | University of Zaragoza | 2006
+description: ""
+image: avatar.jpg
+page-layout: full
+about: 
+  id: about
+  template: trestles
+  image-shape: round
+  image: avatar.jpg
+  links:
+    - icon: linkedin
+      href: https://www.linkedin.com/in/ana-bel%C3%A9n-mart%C3%ADnez-mart%C3%ADnez-7202585a/
+    - icon: envelope
+      text: Email
+      href: mailto:martinez.anika@gmail.com
+    - icon: orcid
+      text: ORCID
+      href: https://orcid.org/0000-0002-1557-7545  
+---
+
+<hr>
+
+
+:::{#about}
+
+## Education
+{{< meta education >}}
+
+
+## Affiliations
+{{< meta affiliation >}}

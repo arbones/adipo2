@@ -20,6 +20,8 @@ website:
     
     
     right:
+      - text: "<img src='img/blog_icon.png' style='height:40px; margin-top:-3px;'/>"
+        href: https://arbones.github.io/
       - icon: github
         href: https://github.com/arbones/adipo2
       - icon: envelope
