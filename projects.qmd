@@ -3,11 +3,16 @@ title: Current Projects
 toc: true
 ---
 
-# The Fat expandibility (FATe).
+# The Fat expandibility (FATe)
+
+We investigate the expandability limits of subcutaneous adipose tissue and their role in ectopic lipid deposition — particularly in the liver (MASLD). At the core of this line is the FATe cohort, over 500 individuals with obesity recruited since 2013, providing biological samples, multi-omics data, and longitudinal clinical follow-up.
+
+![](img/expand.png){fig-align="center" width="80%"}
+
+<details>
+<summary>Read more</summary>
 
 Obesity, characterized by excessive fat accumulation, poses health risks. Subcutaneous adipose tissue can expand during positive energy balance, but once its expansion capacity is exceeded, ectopic lipid deposition occurs in other organs. One prevalent comorbidity of obesity is intrahepatic lipid accumulation, as seen in metabolic dysfunction-associated steatotic liver disease (MASLD, formerly NAFLD).
-
-![](img/expand.png)
 
 This project builds on the group's primary research, initiated under the [FATe Project](https://cardiab.biomedcentral.com/articles/10.1186/s12933-015-0203-6){target="_blank"}, which studied adipose tissue expandability and aimed to identify non-invasive biomarkers for expansion limits and obesity-related complications. The initial study identified factors limiting subcutaneous adipose tissue expansion and __stratified obese patients__ using biomarker-based predictive models ([FASEB. 2022](https://faseb.onlinelibrary.wiley.com/doi/epdf/10.1096/fj.202200118RR)). Mesenchymal stem cell lines from diverse phenotypes were characterized.
 
@@ -15,12 +20,10 @@ Then, the team focused on using CRISPR/Cas9 __gene-editing technology__ to modif
 
 Moreover, given the limitations of traditional metrics like BMI and waist circumference in assessing obesity-related risks, we demonstrated that the SC/VIS fat ratio is a more effective metric for distinguishing metabolic health profiles. We identified ISM1 as a promising non-invasive biomarker, showing strong correlations with fat distribution, serum adipokines, and glucose regulation, highlighting its potential for improved obesity risk assessment ([Cardiovascular Diabetol. 2023](https://cardiab.biomedcentral.com/articles/10.1186/s12933-023-02075-0)).
 
-:::column-margin
-![](img/ism4.png)
-:::
+![](img/ism4.png){fig-align="center" width="50%"}
 
-We mantain a continuously expanding cohort with over 500 individuals with obesity recruited since 2013 as part of the FATe Project. Participants undergo comprehensive characterization and have donated adipose tissue (subcutaneous and visceral), DNA, blood, and liver biopsies. Mesenchymal stem cells from the adipose tissue have been used to establish cell cultures. Omics techniques, including bulk and single-nuclei RNA sequencing, miRNA analysis, and exome sequencing, have been applied to selected subgroups.   
-__This cohort actively supports the group’s research projects and would be available for national and international collaborations.__
+We mantain a continuously expanding cohort with over 500 individuals with obesity recruited since 2013 as part of the FATe Project. Participants undergo comprehensive characterization and have donated adipose tissue (subcutaneous and visceral), DNA, blood, and liver biopsies. Mesenchymal stem cells from the adipose tissue have been used to establish cell cultures. Omics techniques, including bulk and single-nuclei RNA sequencing, miRNA analysis, and exome sequencing, have been applied to selected subgroups.
+__This cohort actively supports the group's research projects and would be available for national and international collaborations.__
 
 ```{=html}
 <div  style="margin: 30px; text-align: center;">
@@ -28,9 +31,22 @@ __This cohort actively supports the group’s research projects and would be ava
 </div>
 ```
 
+</details>
+
 ----
 
 # New biomarkers for MASLD and hepatocellular carcinoma (HCC)
+
+Two ISCIII-funded projects (PMP21/00094 and PI22/01366) develop non-invasive transcriptomic biomarkers to stage MASLD progression and identify patients at high risk of hepatocellular carcinoma, combining RNA-seq with machine learning and AI-driven computational approaches.
+
+::: column-margin
+![](img/insti/ISCIII.png)
+:::
+
+<!-- TODO: add graphical abstract image -->
+
+<details>
+<summary>Read more</summary>
 
 Metabolic dysfunction-associated steatotic liver disease (MASLD), a widespread condition, encompasses a spectrum from simple steatosis ("fatty liver") to steatohepatitis (SH). SH can escalate into non-alcoholic steatohepatitis (MASH), which may further progress to advanced fibrosis (cirrhosis), hepatocellular carcinoma (HCC), and liver failure. The prevalence of MASLD is expected to rise due to the global obesity epidemic driven by sedentary lifestyles and poor dietary habits.
 
@@ -40,9 +56,6 @@ Over recent years, gene expression profiling of human cells and tissues has adva
 
 Our team is engaged in two national projects funded by the Instituto de Salud Carlos III: a consortium in the personalized medicine framework (PMP21/00094) and a single-center initiative (PI22/01366). These aim to develop innovative methodologies combining gene expression analyses with advanced statistical techniques to create non-invasive biomarkers for tracking MASLD progression and identifying patients at high risk for HCC. These efforts focus on:
 
-::: column-margin
-![](img/insti/ISCIII.png)
-:::
 1. Enhancing understanding of the molecular mechanisms underlying liver diseases.
 2. Proposing new therapeutic targets for drug development.
 3. Identifying transcriptional patterns specific to fibrosis, shedding light on the molecular drivers of inflammation and prefibrotic states.
@@ -51,4 +64,33 @@ We will integrate transcriptomic data with established predictors (e.g., FIB-4, 
 
 This approach seeks to bridge current gaps in MASLD management, facilitating early diagnosis, risk stratification, and improved clinical outcomes for patients at risk of progressing to HCC.
 
+</details>
 
+----
+
+# Hypoxia and liver fibrosis: unlocking MASLD progression through multi-omics and AI
+
+ISCIII project PI25/02003 investigates how obstructive sleep apnea-driven intermittent hypoxia accelerates MASLD progression to advanced fibrosis. Two prospective cohorts are studied with spatial transcriptomics, single-nucleus RNA-seq, and exosomal miRNA profiling to map hypoxia-driven fibrotic niches and discover circulating biomarkers.
+
+::: column-margin
+![](img/insti/ISCIII.png)
+:::
+
+<!-- TODO: add graphical abstract image -->
+
+<details>
+<summary>Read more</summary>
+
+Obstructive sleep apnea (OSA) causes recurrent episodes of intermittent hypoxia that may act as an independent driver of liver injury. Existing evidence — including preliminary data from our FATe cohort — indicates that OSA is associated with greater hepatic steatosis and more advanced fibrosis regardless of obesity. Despite this, OSA and MASLD are routinely managed in separate clinical settings, and the molecular mechanisms linking intermittent hypoxia to fibrosis progression remain poorly defined.
+
+This project investigates how chronic intermittent hypoxia shapes the molecular and cellular landscape of MASLD using a combined clinical and experimental approach. We study two prospective cohorts recruited at the Hospital Universitario Miguel Servet: a __bariatric surgery cohort__ (n=30) providing biopsy-proven liver and adipose tissue samples, and an __OSA cohort__ (n=100) spanning a wide BMI range and evaluated with polysomnography and FibroScan at baseline and 12-month follow-up.
+
+To map hypoxia-induced changes at single-cell and spatial resolution, we integrate __bulk RNA-seq__, __single-nucleus RNA-seq__ (snRNA-seq), and __spatial transcriptomics__ (10x Genomics Visium HD) on liver and adipose biopsies. A key focus is lipid-associated macrophages (LAMs / Trem2+), a macrophage subset that accumulates in fatty liver and adipose tissue and whose balance between lipid buffering and fibrogenic activity may be critically modulated by hypoxia. Protein-level validation of candidate targets is performed with the __MACSima__ multiplexed imaging system.
+
+In parallel, we profile __exosomal miRNAs__ from circulating blood as minimally invasive biomarkers of hypoxia-driven disease activity. Functional studies in lipid-loaded hepatocyte–macrophage co-cultures under intermittent hypoxia cycles directly test the mechanistic role of candidate miRNAs and cholesterol biosynthesis pathways — a signature we identified in OSA patients by RNA-seq.
+
+__AI-driven bioinformatics__, including large language models, complements traditional pipelines to integrate high-dimensional multi-omics data, annotate cell–cell communication networks, and generate predictive models for fibrosis progression. A sex-balanced study design and systematic sex-stratified analyses are embedded throughout.
+
+The expected outcomes include a spatial atlas of hypoxia-driven fibrotic niches in MASLD liver, a circulating exosomal miRNA signature for OSA-aggravated disease, and a clinical screening algorithm suitable for integration into national hepatology and respiratory guidelines (AEEH, SEPAR).
+
+</details>
