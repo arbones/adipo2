@@ -122,3 +122,18 @@ $btn-code-copy-color-active: $orange !default;
         }
     }
 }
+// People listing: force every avatar into the same square, cropped to fill
+.listing-box {
+    .card-img-top {
+        margin-bottom: 0;
+    }
+
+    .listing-box-image {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        object-position: center 20%;
+        border-radius: 4px;
+    }
+}
