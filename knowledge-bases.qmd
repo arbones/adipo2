@@ -1,0 +1,114 @@
+---
+title: "KNOWLEDGE BASES"
+toc: true
+toc-location: left
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+A curated set of public databases and knowledge bases we routinely use in the lab, grouped by topic. Links open in a new tab.
+
+```{r}
+#| label: setup
+library(dplyr)
+library(glue)
+library(knitr)
+library(kableExtra)
+
+kb_table <- function(df) {
+  df |>
+    mutate(Resource = glue('<a href="{url}" target="_blank"><b>{resource}</b></a>'),
+           Link = glue('<a href="{url}" target="_blank">{display}</a>')) |>
+    select(Resource, Description = description, Link) |>
+    kbl(escape = FALSE, align = "lll") |>
+    kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                  full_width = TRUE, font_size = 15) |>
+    column_spec(1, width = "18em") |>
+    column_spec(2, width = "34em") |>
+    column_spec(3, width = "16em", extra_css = "font-size: 0.85em;") |>
+    row_spec(0, bold = TRUE, color = "white", background = "#068194")}
+```
+
+## Liver and MASLD
+
+```{r}
+#| label: kb-liver
+tribble(
+  ~resource, ~url, ~display, ~description,
+  "NAFLDkb (models)", "https://www.biosino.org/nafldkb/models/", "biosino.org/nafldkb/models", "Drug-discovery oriented knowledge base for NAFLD/MASLD. The <i>models</i> section catalogs in vitro and in vivo disease models manually curated from the literature (hepatocyte lines, primary cells, macrophages, stellate cells, animal models), annotated by category, class and species.",
+  "Liver Cell Atlas", "https://www.livercellatlas.org/", "livercellatlas.org", "Single-cell and single-nucleus atlas of human and mouse liver across health, obesity and steatotic disease, with browsable cell-type markers and spatial zonation.",
+  "HCCDB", "http://lifeome.net/database/hccdb/home.html", "lifeome.net/database/hccdb", "Integrative expression atlas of hepatocellular carcinoma assembling dozens of public HCC cohorts for cross-dataset gene-level and survival queries.",
+  "LiverTox", "https://www.ncbi.nlm.nih.gov/books/NBK547852/", "ncbi.nlm.nih.gov/books/NBK547852", "NIH knowledge base on drug-induced liver injury, with curated clinical and mechanistic records for individual compounds and herbals."
+) |> kb_table()
+```
+
+## Adipose tissue and metabolism
+
+```{r}
+#| label: kb-adipose
+tribble(
+  ~resource, ~url, ~display, ~description,
+  "Adipose Tissue Knowledge Portal", "https://adiposetissue.org/", "adiposetissue.org", "Central portal integrating clinical, transcriptomic and proteomic adipose data from >6,000 women and men across 67 datasets, covering multiple depots, resident cell types and adipocyte perturbation studies, down to single-cell resolution (Zhong, Cell Metab, 2025).",
+  "Human Adipose Single-Cell Atlas", "https://singlecell.broadinstitute.org/single_cell/study/SCP1376", "singlecell.broadinstitute.org (SCP1376)", "Single-nucleus atlas of human subcutaneous and visceral adipose tissue across BMI and sex, with the paired mouse dataset (Emont, Nature, 2022).",
+  "GTEx Portal", "https://gtexportal.org/home/", "gtexportal.org", "Bulk expression and eQTL resource across 50+ human tissues, including subcutaneous and visceral adipose and liver; the reference for tissue-specific gene expression.",
+  "Type 2 Diabetes Knowledge Portal", "https://t2d.hugeamp.org/", "t2d.hugeamp.org", "Aggregated human genetics of type 2 diabetes and cardiometabolic traits (GWAS, effector genes, tissue-level annotations) with gene- and variant-centric views.",
+  "Adipocyte / brown fat MetaboLights datasets", "https://www.ebi.ac.uk/metabolights/", "ebi.ac.uk/metabolights", "EBI repository of metabolomics and lipidomics studies, including many adipose and hepatic lipid profiling datasets with raw files and metadata."
+) |> kb_table()
+```
+
+## Single-cell and spatial transcriptomics
+
+```{r}
+#| label: kb-singlecell
+tribble(
+  ~resource, ~url, ~display, ~description,
+  "CELLxGENE Discover", "https://cellxgene.cziscience.com/", "cellxgene.cziscience.com", "Standardized, cross-study collection of annotated single-cell datasets with interactive exploration and direct download of h5ad/rds objects.",
+  "Human Cell Atlas Data Portal", "https://data.humancellatlas.org/", "data.humancellatlas.org", "Primary distribution point for Human Cell Atlas projects, with harmonized metadata and processed count matrices.",
+  "Tabula Sapiens", "https://tabula-sapiens.sf.czbiohub.org/", "tabula-sapiens.sf.czbiohub.org", "Multi-organ single-cell reference from individual human donors, useful as a cross-tissue baseline for annotation.",
+  "Azimuth", "https://azimuth.hubmapconsortium.org/", "azimuth.hubmapconsortium.org", "Reference-based annotation service for single-cell data, mapping a query object onto curated tissue references.",
+  "CellMarker 2.0", "http://117.50.127.228/CellMarker/", "CellMarker 2.0", "Manually curated catalog of cell-type marker genes for human and mouse tissues, including adipose and liver."
+) |> kb_table()
+```
+
+## Genes, pathways and proteins
+
+```{r}
+#| label: kb-pathways
+tribble(
+  ~resource, ~url, ~display, ~description,
+  "MSigDB", "https://www.gsea-msigdb.org/gsea/msigdb/", "gsea-msigdb.org", "Gene-set collections (hallmark, canonical pathways, GO, immunologic and cell-type signatures) underlying most GSEA and fgsea analyses.",
+  "Reactome", "https://reactome.org/", "reactome.org", "Open, peer-reviewed pathway database with detailed reaction-level curation and pathway enrichment tools.",
+  "KEGG", "https://www.genome.jp/kegg/", "genome.jp/kegg", "Reference pathway maps for metabolism, signaling and disease; the standard vocabulary for metabolic pathway annotation.",
+  "STRING", "https://string-db.org/", "string-db.org", "Protein-protein association network integrating experimental, curated and predicted interactions, with built-in functional enrichment.",
+  "Human Protein Atlas", "https://www.proteinatlas.org/", "proteinatlas.org", "Tissue, single-cell, subcellular and pathology protein expression maps with immunohistochemistry images and survival associations."
+) |> kb_table()
+```
+
+## Human genetics and variation
+
+```{r}
+#| label: kb-genetics
+tribble(
+  ~resource, ~url, ~display, ~description,
+  "gnomAD", "https://gnomad.broadinstitute.org/", "gnomad.broadinstitute.org", "Population allele frequencies from exome and genome sequencing of >800,000 individuals; the reference for variant rarity and constraint metrics.",
+  "GWAS Catalog", "https://www.ebi.ac.uk/gwas/", "ebi.ac.uk/gwas", "Curated repository of published genome-wide association studies, with harmonized summary statistics for most recent studies.",
+  "Open Targets Platform", "https://platform.opentargets.org/", "platform.opentargets.org", "Integrated gene-disease evidence for target identification and prioritization, combining genetics, expression, pathways and drug data.",
+  "ClinVar", "https://www.ncbi.nlm.nih.gov/clinvar/", "ncbi.nlm.nih.gov/clinvar", "Clinical interpretations of sequence variants and their relationships to disease, with submitter-level evidence."
+) |> kb_table()
+```
+
+## Omics repositories
+
+```{r}
+#| label: kb-repos
+tribble(
+  ~resource, ~url, ~display, ~description,
+  "GEO", "https://www.ncbi.nlm.nih.gov/geo/", "ncbi.nlm.nih.gov/geo", "Largest public archive of functional genomics data (arrays, bulk and single-cell RNA-seq) with processed matrices and sample metadata.",
+  "ArrayExpress / BioStudies", "https://www.ebi.ac.uk/biostudies/arrayexpress", "ebi.ac.uk/biostudies", "EBI counterpart to GEO for functional genomics submissions, now served through BioStudies.",
+  "SRA / ENA", "https://www.ebi.ac.uk/ena/browser/home", "ebi.ac.uk/ena", "Primary archives of raw sequencing reads; the starting point when a study's processed data are insufficient.",
+  "PRIDE", "https://www.ebi.ac.uk/pride/", "ebi.ac.uk/pride", "Public repository for mass-spectrometry proteomics data, including raw spectra, identification results and quantification.",
+  "Metabolomics Workbench", "https://www.metabolomicsworkbench.org/", "metabolomicsworkbench.org", "NIH repository of metabolomics studies with raw and processed data, plus tools for pathway mapping and cross-study comparison."
+) |> kb_table()
+```

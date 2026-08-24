@@ -15,6 +15,8 @@ website:
         href: projects.qmd
       - text: "Publications"
         href: pubs.qmd
+      - text: "Knowledge Bases"
+        href: knowledge-bases.qmd
       - text: "Crew"
         href: people/index.qmd
     
