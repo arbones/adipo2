@@ -22,7 +22,7 @@ website:
     
     
     right:
-      - text: "<img src='img/blog_icon.png' style='height:40px; margin-top:-3px;'/>"
+      - text: "<img src='/img/blog_icon.png' class='blog-icon' style='height:40px; margin-top:-3px;'/>"
         href: https://arbones.github.io/
       - icon: github
         href: https://github.com/arbones/adipo2
