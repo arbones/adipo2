@@ -155,12 +155,55 @@ $btn-code-copy-color-active: $orange !default;
 // Liver sc/sn/spatial catalog explorer (liver-atlas.qmd). Everything is scoped
 // under .liver-atlas so the rest of the site is untouched.
 // ---------------------------------------------------------------------------
+// One modality color scale, shared by the hero accents and the card pills.
+// $purple itself is almost black, so the sn tone is lightened to read as an accent.
+$la-sc: $teal;
+$la-sn: lighten($purple, 30%);
+$la-sp: darken($orange, 6%);
+
 .liver-atlas {
     --la-line: #{$gray-300};
     --la-soft: #{$gray-100};
     --la-mute: #{$gray-600};
 
     font-size: 0.95rem;
+
+    // ---- hero
+    .la-hero {
+        padding: 1.6rem 0 1.4rem;
+        margin-bottom: 0.4rem;
+        border-bottom: 1px solid var(--la-line);
+    }
+
+    .la-eyebrow {
+        margin: 0 0 0.35rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--la-mute);
+    }
+
+    .la-h1 {
+        margin: 0 0 0.7rem;
+        font-size: clamp(2rem, 4.4vw, 3.1rem);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        color: $gray-900;
+    }
+
+    // The three assay words carry the same colors as the modality pills, so the
+    // title doubles as the legend for the cards below it.
+    .la-h1-sc { color: $la-sc; }
+    .la-h1-sn { color: $la-sn; }
+    .la-h1-sp { color: $la-sp; }
+
+    .la-h1-slash {
+        color: $gray-400;
+        font-weight: 300;
+        padding: 0 0.08em;
+    }
 
     .la-lede {
         max-width: 62em;
@@ -539,7 +582,8 @@ $btn-code-copy-color-active: $orange !default;
     .la-badge-q3,
     .la-badge-q4 { background: rgba($gray-600, 0.16); color: $gray-700; }
     .la-badge-nr { background: var(--la-soft); color: var(--la-mute); }
-    .la-badge-prov { background: rgba($light-orange, 0.22); color: darken($orange, 8%); }
+    .la-badge-abs { background: rgba($light-orange, 0.22); color: darken($orange, 8%); }
+    .la-badge-full { background: rgba($teal, 0.12); color: darken($teal, 5%); }
 
     .la-authors {
         margin: 0 0 0.5rem;
@@ -562,9 +606,9 @@ $btn-code-copy-color-active: $orange !default;
         line-height: 1.4;
     }
 
-    .la-pill-sc { background: rgba($teal, 0.13); color: darken($teal, 5%); }
-    .la-pill-sn { background: rgba($purple, 0.11); color: $purple; }
-    .la-pill-sp { background: rgba($orange, 0.15); color: darken($orange, 10%); }
+    .la-pill-sc { background: rgba($la-sc, 0.13); color: darken($la-sc, 5%); }
+    .la-pill-sn { background: rgba($la-sn, 0.13); color: $la-sn; }
+    .la-pill-sp { background: rgba($la-sp, 0.15); color: darken($la-sp, 4%); }
     .la-pill-ctx { background: rgba($pink, 0.1); color: $pink; }
     .la-pill-plat {
         background: $white;
@@ -706,12 +750,10 @@ $btn-code-copy-color-active: $orange !default;
         }
     }
 
-    .la-dot {
+    .la-table .la-badge {
         display: inline-block;
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: $light-orange;
+        margin-top: 3px;
+        white-space: nowrap;
     }
 
     .la-empty {

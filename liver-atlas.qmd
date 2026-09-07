@@ -9,6 +9,11 @@ execute:
 format:
   html:
     include-after-body: html/liver-atlas-app.html
+    # The title stays in the metadata for the navbar, tab and site search, but
+    # the page renders its own hero heading instead of the plain title block.
+    include-in-header:
+      text: |
+        <style>#title-block-header { display: none; }</style>
 ---
 
 ```{r}
@@ -66,7 +71,7 @@ tidy_modality <- function(x) {
 
 tidy_context <- function(x) {
   split_plus(x) |>
-    str_replace("^None of requested categories stated$", "Not stated")}
+    str_replace("^None of requested categories stated$", "Other")}
 
 split_bullets <- function(x) {
   if (is.na(x)) return(character(0))
@@ -153,7 +158,7 @@ records <- raw |>
     year         = as.integer(Year),
     journal      = `Journal Or Server`,
     quartile     = str_replace(`Journal Quartile`, "^Not reported.*", "n/r"),
-    evidence     = if_else(`Evidence Status` == "Full-text confirmed", "confirmed", "provisional"),
+    evidence     = if_else(`Evidence Status` == "Full-text confirmed", "Full text", "Abstract only"),
     modality     = map(Modality, tidy_modality),
     context      = map(`Biological Context`, tidy_context),
     platforms    = map(`Spatial Omics Platform`, tag_platforms),
@@ -181,13 +186,21 @@ cat("\n\n")
 ```{=html}
 <div id="liver-atlas" class="liver-atlas column-screen-inset">
 
-  <p class="la-lede">
-    A curated catalog of original-research studies that profiled <strong>human liver</strong>
-    material by single-cell RNA-seq, single-nucleus RNA-seq or spatial omics. Every record was
-    screened against the same eligibility rules, and the disease context, cohort size, spatial
-    platform and public-data deposition were extracted field by field so they can be filtered
-    rather than read. Bulk RNA-seq, scATAC-seq and validation-only FISH or IHC do not qualify.
-  </p>
+  <header class="la-hero">
+    <p class="la-eyebrow">Knowledge base</p>
+    <h1 class="la-h1">
+      Human liver <span class="la-h1-sc">sc</span><span class="la-h1-slash">/</span><span class="la-h1-sn">sn</span><span class="la-h1-slash">/</span><span class="la-h1-sp">spatial</span> catalog
+    </h1>
+    <p class="la-lede">
+      Who has already sequenced the human liver, and what did they leave behind for you to
+      reuse? Every study here profiled <strong>human liver</strong> material by single-cell,
+      single-nucleus or spatial transcriptomics, all screened against one set of eligibility
+      rules. Disease context, cohort size, spatial platform and public accessions were pulled
+      out field by field, so you can filter your way to the right dataset instead of reading
+      every abstract yourself. Bulk RNA-seq, scATAC-seq and validation-only FISH or IHC do not
+      qualify.
+    </p>
+  </header>
 
   <div class="la-stats" id="la-stats"></div>
 
@@ -242,9 +255,10 @@ cat("\n\n")
   <p class="la-foot">
     Cohort sizes are the counts stated by the authors; where a study reports several
     sub-cohorts the sorting number is the first or explicitly total count, so read the
-    full text on the card before quoting it. Records marked
-    <span class="la-badge la-badge-prov">provisional</span> were screened on title and
-    abstract only, and their fields are correspondingly incomplete.
+    full text on the card before quoting it. Records badged
+    <span class="la-badge la-badge-abs">abstract only</span> were screened on title and
+    abstract without the manuscript, so their fields are correspondingly incomplete; the
+    rest are badged <span class="la-badge la-badge-full">full text</span>.
   </p>
 
 </div>

@@ -15,6 +15,16 @@
     "Spatial omics": "sp"
   };
 
+  const EVIDENCE_CLASS = {
+    "Full text": "la-badge-full",
+    "Abstract only": "la-badge-abs"
+  };
+
+  const EVIDENCE_TITLE = {
+    "Full text": "Fields extracted from the retrieved manuscript",
+    "Abstract only": "Screened on title and abstract; full text unretrieved"
+  };
+
   const DATA_LABEL = {
     Yes: "Deposited",
     No: "None stated",
@@ -127,12 +137,12 @@
   function renderStats() {
     const spatial = DATA.filter(function (r) { return r.isSpatial; }).length;
     const deposited = DATA.filter(function (r) { return r.data_status === "Yes"; }).length;
-    const confirmed = DATA.filter(function (r) { return r.evidence === "confirmed"; }).length;
+    const confirmed = DATA.filter(function (r) { return r.evidence === "Full text"; }).length;
     const stats = [
       [DATA.length, "studies"],
       [spatial, "with spatial omics"],
       [deposited, "with public data"],
-      [confirmed, "full-text confirmed"]
+      [confirmed, "confirmed in full text"]
     ];
     document.getElementById("la-stats").innerHTML = stats.map(function (s) {
       return '<div class="la-stat"><span class="la-stat-n">' + s[0] +
@@ -205,9 +215,8 @@
       '<span class="la-year">' + esc(r.year) + "</span>" +
       '<span class="la-badge la-badge-' + (r.quartile === "n/r" ? "nr" : r.quartile.toLowerCase()) +
       '">' + esc(r.quartile) + "</span>" +
-      (r.evidence === "provisional"
-        ? '<span class="la-badge la-badge-prov" title="Screened on title and abstract only">provisional</span>'
-        : "");
+      '<span class="la-badge ' + EVIDENCE_CLASS[r.evidence] + '" title="' +
+      esc(EVIDENCE_TITLE[r.evidence]) + '">' + esc(r.evidence) + "</span>";
 
     const pills =
       r.modality.map(function (m) { return pill(m, "la-pill-" + (MODALITY_CLASS[m] || "sc")); }).join("") +
@@ -244,7 +253,8 @@
       "<th>Platform</th><th>Donors</th><th>Public data</th></tr></thead><tbody>";
     rows.forEach(function (r) {
       html += '<tr class="la-row" data-idx="' + r._i + '">' +
-        "<td>" + esc(r.year) + (r.evidence === "provisional" ? ' <span class="la-dot" title="provisional"></span>' : "") + "</td>" +
+        "<td>" + esc(r.year) + '<div class="la-badge ' + EVIDENCE_CLASS[r.evidence] + '">' +
+          esc(r.evidence) + "</div></td>" +
         "<td>" + link(r.url, r.title, "la-title") +
           '<div class="la-authors">' + esc(r.first_author) + " et al. &middot; " + esc(r.journal) + "</div></td>" +
         "<td>" + esc(r.modality.join(", ")) + "</td>" +
