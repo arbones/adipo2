@@ -1,0 +1,277 @@
+---
+title: "HUMAN LIVER sc/sn/SPATIAL CATALOG"
+page-layout: full
+toc: false
+execute:
+  echo: false
+  warning: false
+  message: false
+format:
+  html:
+    include-after-body: html/liver-atlas-app.html
+---
+
+```{r}
+#| label: setup
+library(readr)
+library(dplyr)
+library(stringr)
+library(purrr)
+library(tibble)
+library(jsonlite)
+library(htmltools)
+```
+
+```{r}
+#| label: curation-helpers
+
+platform_patterns <- c(
+  "Visium HD"              = "Visium[^;]{0,15}\\bHD",
+  "Visium"                 = "Visium",
+  "GeoMx"                  = "GeoMx",
+  "MERFISH"                = "MERFISH|MERSCOPE",
+  "CosMx"                  = "CosMx",
+  "Xenium"                 = "Xenium",
+  "Molecular Cartography"  = "Molecular Cartography",
+  "In situ sequencing"     = "in situ sequencing|\\bISS\\b",
+  "PhenoCycler"            = "PhenoCycler|CODEX",
+  "Stereo-seq"             = "Stereo-?seq",
+  "Slide-seq"              = "Slide-?seq",
+  "Imaging mass cytometry" = "imaging mass cytometry|\\bIMC\\b",
+  "Laser capture"          = "laser[- ]capture|\\bLCM\\b")
+
+# Elicit writes "Not applicable/reported/mentioned ..." when a study has no
+# qualifying spatial assay or when the platform could not be established.
+no_platform <- "^(not applicable|not reported|not mentioned)"
+
+# A study that ran only Visium HD should not also carry the plain Visium tag, so
+# plain Visium is claimed only by a semicolon-separated segment with no HD in it.
+has_plain_visium <- function(x) {
+  seg <- str_split_1(x, ";")
+  any(str_detect(seg, regex("Visium", ignore_case = TRUE)) &
+        !str_detect(seg, regex("\\bHD", ignore_case = TRUE)))}
+
+tag_platforms <- function(x) {
+  if (is.na(x) || str_detect(x, regex(no_platform, ignore_case = TRUE))) return(character(0))
+  keep <- map_lgl(platform_patterns, \(p) str_detect(x, regex(p, ignore_case = TRUE)))
+  tags <- names(platform_patterns)[keep]
+  if ("Visium HD" %in% tags && !has_plain_visium(x)) setdiff(tags, "Visium") else tags}
+
+split_plus <- function(x) str_split_1(x, fixed(" + ")) |> str_trim()
+
+tidy_modality <- function(x) {
+  split_plus(x) |>
+    str_replace("^spatial Omics$", "Spatial omics") |>
+    setdiff("Not established in available text")}
+
+tidy_context <- function(x) {
+  split_plus(x) |>
+    str_replace("^None of requested categories stated$", "Not stated")}
+
+split_bullets <- function(x) {
+  if (is.na(x)) return(character(0))
+  str_split_1(x, "\n\\s*-\\s+") |>
+    str_remove("^-\\s+") |>
+    str_trim() |>
+    discard(\(s) s == "")}
+
+# Elicit reports counts as free text; take the explicit "(N ... total)" when the
+# study gives one, otherwise the leading integer. Rows flagged Ambiguous get no
+# number, since their leading integer is not the donor total.
+count_donors <- function(x) {
+  if (is.na(x) || str_starts(x, "Ambiguous")) return(NA_integer_)
+  total <- str_match(x, "\\((\\d+)\\s+\\w+\\s+total\\)")[, 2]
+  as.integer(coalesce(total, str_extract(x, "^\\d+")))}
+```
+
+```{r}
+#| label: accession-helpers
+
+accession_rules <- tribble(
+  ~pattern,            ~base,
+  "GSE\\d{4,}",        "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=",
+  "PRJ[EDN][A-Z]\\d+", "https://www.ncbi.nlm.nih.gov/bioproject/",
+  "SR[PRXS]\\d{5,}",   "https://www.ncbi.nlm.nih.gov/sra/?term=",
+  "E-MTAB-\\d+",       "https://www.ebi.ac.uk/biostudies/arrayexpress/studies/",
+  "E-GEAD-\\d+",       "https://ddbj.nig.ac.jp/search/entry/gea/",
+  "S-BSST\\d+",        "https://www.ebi.ac.uk/biostudies/studies/",
+  "EGAS\\d{6,}",       "https://ega-archive.org/studies/",
+  "EGAD\\d{6,}",       "https://ega-archive.org/datasets/",
+  "EGAC\\d{6,}",       "https://ega-archive.org/dacs/",
+  "HRA\\d{6}",         "https://ngdc.cncb.ac.cn/gsa-human/browse/",
+  "OMIX\\d{6}",        "https://ngdc.cncb.ac.cn/omix/release/",
+  "PXD\\d{6}",         "https://www.ebi.ac.uk/pride/archive/projects/",
+  "DR[RAX]\\d{5,}",    "https://ddbj.nig.ac.jp/search/entry/sra-run/")
+
+match_rule <- function(txt, pattern, base) {
+  ids <- str_extract_all(txt, regex(pattern, ignore_case = TRUE))[[1]] |> toupper() |> unique()
+  tibble(label = ids, url = paste0(base, ids))}
+
+# Accessions are matched on the URL-stripped text so an ID quoted inside its own
+# repository link is not counted twice.
+find_accessions <- function(txt) {
+  bare <- str_remove_all(txt, "https?://\\S+")
+  map2(accession_rules$pattern, accession_rules$base, \(p, b) match_rule(bare, p, b)) |>
+    list_rbind()}
+
+find_dois <- function(txt) {
+  dois <- str_remove_all(txt, "https?://\\S+") |>
+    str_extract_all("10\\.\\d{4,}/[^\\s,;)]+") |>
+    pluck(1) |>
+    str_remove("[.;,]$") |>
+    unique()
+  tibble(label = dois, url = paste0("https://doi.org/", dois))}
+
+find_urls <- function(txt, known) {
+  urls <- str_extract_all(txt, "https?://[^\\s,;)]+")[[1]] |> str_remove("[.;,]$") |> unique()
+  urls <- discard(urls, \(u) any(str_detect(u, fixed(known, ignore_case = TRUE))))
+  tibble(label = str_remove(urls, "^https?://(www\\.)?") |> str_extract("^[^/]+"), url = urls)}
+
+data_links <- function(txt) {
+  if (is.na(txt) || !str_starts(txt, "Yes")) return(tibble(label = character(), url = character()))
+  acc <- find_accessions(txt)
+  out <- bind_rows(acc, find_dois(txt), find_urls(txt, acc$label))
+  distinct(out, url, .keep_all = TRUE)}
+```
+
+```{r}
+#| label: catalog
+#| output: asis
+
+raw <- read_csv("data/liver-atlas/catalog.csv", show_col_types = FALSE) |>
+  distinct(DOI, .keep_all = TRUE)
+
+stopifnot(nrow(raw) > 0)
+
+records <- raw |>
+  transmute(
+    title        = Title,
+    authors      = Authors,
+    first_author = map_chr(Authors, \(a) str_split_1(a, ",\\s*")[1]),
+    url          = URL,
+    doi          = DOI,
+    year         = as.integer(Year),
+    journal      = `Journal Or Server`,
+    quartile     = str_replace(`Journal Quartile`, "^Not reported.*", "n/r"),
+    evidence     = if_else(`Evidence Status` == "Full-text confirmed", "confirmed", "provisional"),
+    modality     = map(Modality, tidy_modality),
+    context      = map(`Biological Context`, tidy_context),
+    platforms    = map(`Spatial Omics Platform`, tag_platforms),
+    spatial_raw  = `Spatial Omics Platform`,
+    donors_text  = `Human Liver Individuals Profiled`,
+    donors_n     = map_int(`Human Liver Individuals Profiled`, count_donors),
+    data_status  = case_when(str_starts(`Public Data Availability`, "Yes") ~ "Yes",
+                             str_starts(`Public Data Availability`, "No public") ~ "No",
+                             .default = "Unknown"),
+    data_raw     = `Public Data Availability`,
+    links        = map(`Public Data Availability`, data_links),
+    focus        = `Study Focus`,
+    results      = map(`Main Results`, split_bullets),
+    summary      = Summary)
+
+# "<\/" keeps a stray "</script>" inside an abstract from closing the JSON block.
+payload <- toJSON(records, auto_unbox = TRUE, na = "null") |>
+  str_replace_all(fixed("</"), "<\\/")
+
+cat("\n\n")
+cat(as.character(tags$script(type = "application/json", id = "liver-catalog", HTML(payload))))
+cat("\n\n")
+```
+
+```{=html}
+<div id="liver-atlas" class="liver-atlas column-screen-inset">
+
+  <p class="la-lede">
+    A curated catalog of original-research studies that profiled <strong>human liver</strong>
+    material by single-cell RNA-seq, single-nucleus RNA-seq or spatial omics. Every record was
+    screened against the same eligibility rules, and the disease context, cohort size, spatial
+    platform and public-data deposition were extracted field by field so they can be filtered
+    rather than read. Bulk RNA-seq, scATAC-seq and validation-only FISH or IHC do not qualify.
+  </p>
+
+  <div class="la-stats" id="la-stats"></div>
+
+  <div class="la-hist-wrap">
+    <div class="la-hist-head">
+      <span class="la-section-label">Studies per year</span>
+      <span class="la-hint">click a bar to filter</span>
+    </div>
+    <div class="la-hist" id="la-hist"></div>
+  </div>
+
+  <div class="la-toolbar">
+    <div class="la-search">
+      <input type="search" id="la-search" autocomplete="off"
+             placeholder="Search title, authors, findings, journal, accession…"
+             aria-label="Search the catalog">
+    </div>
+    <div class="la-toolbar-right">
+      <label class="la-select">Sort
+        <select id="la-sort">
+          <option value="year-desc">Newest first</option>
+          <option value="year-asc">Oldest first</option>
+          <option value="donors-desc">Most donors</option>
+          <option value="title-asc">Title A-Z</option>
+        </select>
+      </label>
+      <div class="la-viewtoggle" role="group" aria-label="View mode">
+        <button type="button" data-view="cards" class="is-active">Cards</button>
+        <button type="button" data-view="table">Table</button>
+      </div>
+      <button type="button" id="la-download" class="la-download">Download CSV</button>
+    </div>
+  </div>
+
+  <div class="la-body">
+    <div class="la-rail">
+      <details open>
+        <summary class="la-rail-summary">Filters <span id="la-active-count"></span></summary>
+        <div id="la-facets"></div>
+      </details>
+    </div>
+
+    <div class="la-results">
+      <div class="la-count-bar">
+        <span id="la-count"></span>
+        <button type="button" id="la-clear" class="la-clear">Clear all filters</button>
+      </div>
+      <div id="la-output"></div>
+    </div>
+  </div>
+
+  <p class="la-foot">
+    Cohort sizes are the counts stated by the authors; where a study reports several
+    sub-cohorts the sorting number is the first or explicitly total count, so read the
+    full text on the card before quoting it. Records marked
+    <span class="la-badge la-badge-prov">provisional</span> were screened on title and
+    abstract only, and their fields are correspondingly incomplete.
+  </p>
+
+</div>
+```
+
+```{r}
+#| label: dictionary
+#| output: asis
+
+dict_row <- function(field, definition, values) {
+  tags$tr(tags$th(field, scope = "row"), tags$td(definition), tags$td(values))}
+
+dict_rows <- read_csv("data/liver-atlas/dictionary.csv", show_col_types = FALSE) |>
+  filter(Column != "Linked source") |>
+  select(field = Column, definition = Definition, values = `Categories Or Format`) |>
+  pmap(dict_row)
+
+dict_head <- tags$tr(tags$th("Field"), tags$th("Definition"), tags$th("Values"))
+
+dict_block <- tags$div(
+  class = "liver-atlas column-screen-inset",
+  tags$details(
+    class = "la-dict",
+    tags$summary("How each field was defined"),
+    tags$table(class = "la-dict-table", tags$thead(dict_head), tags$tbody(dict_rows))))
+
+cat("\n\n")
+cat(as.character(dict_block))
+cat("\n\n")
+```

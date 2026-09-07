@@ -10,6 +10,8 @@ execute:
 
 A curated set of public databases and knowledge bases we routinely use in the lab, grouped by topic. Links open in a new tab.
 
+Looking for primary studies rather than portals? The [human liver sc/sn/spatial catalog](liver-atlas.qmd) is a searchable, filterable index of published single-cell, single-nucleus and spatial transcriptomics studies of human liver, with disease context, cohort size, platform and data accessions for each one.
+
 ```{r}
 #| label: setup
 library(dplyr)

@@ -1,0 +1,399 @@
+<script>
+// Reactive browser for the human liver sc/sn/spatial catalog.
+// The catalog is inlined by the R chunk in liver-atlas.qmd as a JSON <script>
+// block, so this runs entirely client-side with no fetch and no dependencies.
+(function () {
+  const root = document.getElementById("liver-atlas");
+  const payload = document.getElementById("liver-catalog");
+  if (!root || !payload) return;
+
+  const DATA = JSON.parse(payload.textContent);
+
+  const MODALITY_CLASS = {
+    "scRNA-seq": "sc",
+    "snRNA-seq": "sn",
+    "Spatial omics": "sp"
+  };
+
+  const DATA_LABEL = {
+    Yes: "Deposited",
+    No: "None stated",
+    Unknown: "Not established"
+  };
+
+  // ---------------------------------------------------------------- prepare
+
+  // jsonlite unboxes length-1 vectors, so a study with a single modality or a
+  // single bullet arrives as a bare string. Normalize everything back to arrays.
+  function arr(v) {
+    if (v === null || v === undefined) return [];
+    return Array.isArray(v) ? v : [v];
+  }
+
+  DATA.forEach(function (r, i) {
+    r._i = i;
+    r.modality = arr(r.modality);
+    r.context = arr(r.context);
+    r.platforms = arr(r.platforms);
+    r.results = arr(r.results);
+    r.links = arr(r.links);
+    r.isSpatial = r.modality.indexOf("Spatial omics") !== -1;
+    r.platformFacet = r.platforms.length
+      ? r.platforms
+      : (r.isSpatial ? ["Platform not reported"] : []);
+    r.dataLabel = DATA_LABEL[r.data_status] || r.data_status;
+    r.haystack = [
+      r.title, r.authors, r.journal, r.focus, r.summary, r.donors_text,
+      r.spatial_raw, r.data_raw, r.doi, r.results.join(" "),
+      r.links.map(function (l) { return l.label; }).join(" ")
+    ].join(" ").toLowerCase();
+  });
+
+  const FACETS = [
+    { key: "modality", label: "Modality", get: function (r) { return r.modality; } },
+    { key: "context", label: "Biological context", get: function (r) { return r.context; } },
+    { key: "platform", label: "Spatial platform", get: function (r) { return r.platformFacet; } },
+    { key: "data", label: "Public data", get: function (r) { return [r.dataLabel]; } },
+    { key: "quartile", label: "Journal quartile", get: function (r) { return [r.quartile]; } },
+    { key: "evidence", label: "Evidence", get: function (r) { return [r.evidence]; } }
+  ];
+
+  const state = {
+    q: "",
+    years: new Set(),
+    donors: 0,
+    sort: "year-desc",
+    view: "cards"
+  };
+  FACETS.forEach(function (f) { state[f.key] = new Set(); });
+
+  // ----------------------------------------------------------------- filter
+
+  function matchesExcept(r, skipKey) {
+    if (state.q && r.haystack.indexOf(state.q) === -1) return false;
+    if (state.years.size && !state.years.has(r.year)) return false;
+    if (state.donors && !(r.donors_n >= state.donors)) return false;
+    return FACETS.every(function (f) {
+      if (f.key === skipKey || !state[f.key].size) return true;
+      return f.get(r).some(function (v) { return state[f.key].has(v); });
+    });
+  }
+
+  function filtered() {
+    return DATA.filter(function (r) { return matchesExcept(r, null); });
+  }
+
+  const SORTERS = {
+    "year-desc": function (a, b) { return b.year - a.year || a.title.localeCompare(b.title); },
+    "year-asc": function (a, b) { return a.year - b.year || a.title.localeCompare(b.title); },
+    "donors-desc": function (a, b) { return (b.donors_n || -1) - (a.donors_n || -1); },
+    "title-asc": function (a, b) { return a.title.localeCompare(b.title); }
+  };
+
+  function activeFilterCount() {
+    let n = state.years.size + (state.donors ? 1 : 0) + (state.q ? 1 : 0);
+    FACETS.forEach(function (f) { n += state[f.key].size; });
+    return n;
+  }
+
+  // ------------------------------------------------------------------ utils
+
+  function esc(s) {
+    return String(s === null || s === undefined ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function link(url, text, cls) {
+    return '<a class="' + cls + '" href="' + esc(url) + '" target="_blank" rel="noopener">' +
+      esc(text) + "</a>";
+  }
+
+  function pill(text, cls) {
+    return '<span class="la-pill ' + cls + '">' + esc(text) + "</span>";
+  }
+
+  function dataCell(r) {
+    if (r.links.length) {
+      return r.links.map(function (l) {
+        return link(l.url, l.label, "la-acc");
+      }).join(" ");
+    }
+    return '<span class="la-muted">' + esc(r.dataLabel) + "</span>";
+  }
+
+  // ------------------------------------------------------------- rendering
+
+  function renderStats() {
+    const spatial = DATA.filter(function (r) { return r.isSpatial; }).length;
+    const deposited = DATA.filter(function (r) { return r.data_status === "Yes"; }).length;
+    const confirmed = DATA.filter(function (r) { return r.evidence === "confirmed"; }).length;
+    const stats = [
+      [DATA.length, "studies"],
+      [spatial, "with spatial omics"],
+      [deposited, "with public data"],
+      [confirmed, "full-text confirmed"]
+    ];
+    document.getElementById("la-stats").innerHTML = stats.map(function (s) {
+      return '<div class="la-stat"><span class="la-stat-n">' + s[0] +
+        '</span><span class="la-stat-l">' + s[1] + "</span></div>";
+    }).join("");
+  }
+
+  function renderHistogram() {
+    const years = DATA.map(function (r) { return r.year; }).filter(Boolean);
+    const lo = Math.min.apply(null, years);
+    const hi = Math.max.apply(null, years);
+    const rows = filtered();
+    const counts = {};
+    rows.forEach(function (r) { counts[r.year] = (counts[r.year] || 0) + 1; });
+    const peak = Math.max.apply(null, Object.keys(counts).map(function (k) { return counts[k]; }).concat([1]));
+
+    let html = "";
+    for (let y = lo; y <= hi; y++) {
+      const n = counts[y] || 0;
+      const on = state.years.has(y);
+      html += '<button type="button" class="la-bar' + (on ? " is-on" : "") +
+        '" data-year="' + y + '" title="' + n + ' studies in ' + y + '">' +
+        '<span class="la-bar-n">' + (n || "") + "</span>" +
+        '<span class="la-bar-fill" style="height:' + Math.round((n / peak) * 100) + '%"></span>' +
+        '<span class="la-bar-y">' + y + "</span></button>";
+    }
+    document.getElementById("la-hist").innerHTML = html;
+  }
+
+  function renderFacets() {
+    let html = "";
+    FACETS.forEach(function (f) {
+      const pool = DATA.filter(function (r) { return matchesExcept(r, f.key); });
+      const counts = {};
+      DATA.forEach(function (r) {
+        f.get(r).forEach(function (v) { if (!(v in counts)) counts[v] = 0; });
+      });
+      pool.forEach(function (r) {
+        f.get(r).forEach(function (v) { counts[v] += 1; });
+      });
+      const values = Object.keys(counts).sort(function (a, b) {
+        return counts[b] - counts[a] || a.localeCompare(b);
+      });
+      if (!values.length) return;
+      html += '<div class="la-facet"><h4>' + esc(f.label) + "</h4><div class='la-chips'>";
+      values.forEach(function (v) {
+        const on = state[f.key].has(v);
+        html += '<button type="button" class="la-chip' + (on ? " is-on" : "") +
+          '" data-facet="' + esc(f.key) + '" data-value="' + esc(v) + '"' +
+          (counts[v] === 0 && !on ? " disabled" : "") + ">" +
+          esc(v) + '<span class="la-chip-n">' + counts[v] + "</span></button>";
+      });
+      html += "</div></div>";
+    });
+
+    html += '<div class="la-facet"><h4>Minimum donors</h4>' +
+      '<select id="la-donors" class="la-donor-select">' +
+      [0, 3, 5, 10, 20, 50].map(function (n) {
+        return '<option value="' + n + '"' + (state.donors === n ? " selected" : "") + ">" +
+          (n ? "≥ " + n + " donors" : "Any") + "</option>";
+      }).join("") + "</select></div>";
+
+    document.getElementById("la-facets").innerHTML = html;
+    const n = activeFilterCount();
+    document.getElementById("la-active-count").textContent = n ? "(" + n + ")" : "";
+  }
+
+  function cardHTML(r) {
+    const badges =
+      '<span class="la-year">' + esc(r.year) + "</span>" +
+      '<span class="la-badge la-badge-' + (r.quartile === "n/r" ? "nr" : r.quartile.toLowerCase()) +
+      '">' + esc(r.quartile) + "</span>" +
+      (r.evidence === "provisional"
+        ? '<span class="la-badge la-badge-prov" title="Screened on title and abstract only">provisional</span>'
+        : "");
+
+    const pills =
+      r.modality.map(function (m) { return pill(m, "la-pill-" + (MODALITY_CLASS[m] || "sc")); }).join("") +
+      r.context.map(function (c) { return pill(c, "la-pill-ctx"); }).join("") +
+      r.platforms.map(function (p) { return pill(p, "la-pill-plat"); }).join("");
+
+    const results = r.results.length
+      ? "<h4>Main results</h4><ul>" + r.results.map(function (x) {
+          return "<li>" + esc(x) + "</li>";
+        }).join("") + "</ul>"
+      : "";
+
+    return '<article class="la-card">' +
+      '<div class="la-card-meta">' + badges + "</div>" +
+      "<h3>" + link(r.url, r.title, "la-title") + "</h3>" +
+      '<p class="la-authors">' + esc(r.first_author) + " et al. &middot; <em>" +
+        esc(r.journal) + "</em></p>" +
+      '<div class="la-pills">' + pills + "</div>" +
+      '<dl class="la-facts">' +
+        "<dt>Donors</dt><dd>" + esc(r.donors_text) + "</dd>" +
+        "<dt>Data</dt><dd>" + dataCell(r) + "</dd>" +
+      "</dl>" +
+      '<details class="la-details"><summary>Details</summary>' +
+        "<h4>Study focus</h4><p>" + esc(r.focus) + "</p>" +
+        results +
+        "<h4>Abstract</h4><p>" + esc(r.summary) + "</p>" +
+        '<p class="la-doi">' + link("https://doi.org/" + r.doi, r.doi, "") + "</p>" +
+      "</details></article>";
+  }
+
+  function tableHTML(rows) {
+    let html = '<div class="la-tablewrap"><table class="la-table"><thead><tr>' +
+      "<th>Year</th><th>Study</th><th>Modality</th><th>Context</th>" +
+      "<th>Platform</th><th>Donors</th><th>Public data</th></tr></thead><tbody>";
+    rows.forEach(function (r) {
+      html += '<tr class="la-row" data-idx="' + r._i + '">' +
+        "<td>" + esc(r.year) + (r.evidence === "provisional" ? ' <span class="la-dot" title="provisional"></span>' : "") + "</td>" +
+        "<td>" + link(r.url, r.title, "la-title") +
+          '<div class="la-authors">' + esc(r.first_author) + " et al. &middot; " + esc(r.journal) + "</div></td>" +
+        "<td>" + esc(r.modality.join(", ")) + "</td>" +
+        "<td>" + esc(r.context.join(", ")) + "</td>" +
+        "<td>" + esc(r.platforms.join(", ") || "—") + "</td>" +
+        "<td>" + (r.donors_n === null ? "—" : r.donors_n) + "</td>" +
+        "<td>" + dataCell(r) + "</td></tr>" +
+        '<tr class="la-row-detail" hidden><td colspan="7">' +
+          "<strong>Focus.</strong> " + esc(r.focus) +
+          (r.results.length ? "<ul>" + r.results.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" : "") +
+        "</td></tr>";
+    });
+    return html + "</tbody></table></div>";
+  }
+
+  function render() {
+    const rows = filtered().sort(SORTERS[state.sort]);
+    document.getElementById("la-count").innerHTML =
+      "Showing <strong>" + rows.length + "</strong> of " + DATA.length + " studies";
+
+    const out = document.getElementById("la-output");
+    if (!rows.length) {
+      out.innerHTML = '<p class="la-empty">No study matches these filters. ' +
+        '<button type="button" class="la-linkish" data-clear="1">Clear them</button> and start again.</p>';
+    } else if (state.view === "cards") {
+      out.innerHTML = '<div class="la-grid">' + rows.map(cardHTML).join("") + "</div>";
+    } else {
+      out.innerHTML = tableHTML(rows);
+    }
+    renderFacets();
+    renderHistogram();
+  }
+
+  // ------------------------------------------------------------------ CSV
+
+  const CSV_COLS = [
+    ["Title", function (r) { return r.title; }],
+    ["Authors", function (r) { return r.authors; }],
+    ["Year", function (r) { return r.year; }],
+    ["Journal", function (r) { return r.journal; }],
+    ["Quartile", function (r) { return r.quartile; }],
+    ["DOI", function (r) { return r.doi; }],
+    ["URL", function (r) { return r.url; }],
+    ["Evidence", function (r) { return r.evidence; }],
+    ["Modality", function (r) { return r.modality.join("; "); }],
+    ["Biological context", function (r) { return r.context.join("; "); }],
+    ["Spatial platform", function (r) { return r.platforms.join("; "); }],
+    ["Spatial platform (as reported)", function (r) { return r.spatial_raw; }],
+    ["Individuals profiled", function (r) { return r.donors_text; }],
+    ["Donors (numeric)", function (r) { return r.donors_n; }],
+    ["Public data", function (r) { return r.data_raw; }],
+    ["Accessions", function (r) { return r.links.map(function (l) { return l.label; }).join("; "); }],
+    ["Study focus", function (r) { return r.focus; }],
+    ["Main results", function (r) { return r.results.join(" | "); }]
+  ];
+
+  function csvCell(v) {
+    return '"' + String(v === null || v === undefined ? "" : v).replace(/"/g, '""') + '"';
+  }
+
+  function downloadCSV() {
+    const rows = filtered().sort(SORTERS[state.sort]);
+    const lines = [CSV_COLS.map(function (c) { return csvCell(c[0]); }).join(",")];
+    rows.forEach(function (r) {
+      lines.push(CSV_COLS.map(function (c) { return csvCell(c[1](r)); }).join(","));
+    });
+    const blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "human-liver-sc-spatial-catalog.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }
+
+  // --------------------------------------------------------------- events
+
+  function clearAll() {
+    state.q = "";
+    state.years.clear();
+    state.donors = 0;
+    FACETS.forEach(function (f) { state[f.key].clear(); });
+    document.getElementById("la-search").value = "";
+    render();
+  }
+
+  let timer = null;
+  document.getElementById("la-search").addEventListener("input", function (e) {
+    const v = e.target.value.trim().toLowerCase();
+    clearTimeout(timer);
+    timer = setTimeout(function () { state.q = v; render(); }, 150);
+  });
+
+  document.getElementById("la-sort").addEventListener("change", function (e) {
+    state.sort = e.target.value;
+    render();
+  });
+
+  document.getElementById("la-download").addEventListener("click", downloadCSV);
+  document.getElementById("la-clear").addEventListener("click", clearAll);
+
+  root.querySelectorAll(".la-viewtoggle button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      state.view = b.dataset.view;
+      root.querySelectorAll(".la-viewtoggle button").forEach(function (o) {
+        o.classList.toggle("is-active", o === b);
+      });
+      render();
+    });
+  });
+
+  document.getElementById("la-hist").addEventListener("click", function (e) {
+    const bar = e.target.closest(".la-bar");
+    if (!bar) return;
+    const y = Number(bar.dataset.year);
+    if (state.years.has(y)) state.years.delete(y); else state.years.add(y);
+    render();
+  });
+
+  document.getElementById("la-facets").addEventListener("click", function (e) {
+    const chip = e.target.closest(".la-chip");
+    if (!chip) return;
+    const set = state[chip.dataset.facet];
+    const v = chip.dataset.value;
+    if (set.has(v)) set.delete(v); else set.add(v);
+    render();
+  });
+
+  document.getElementById("la-facets").addEventListener("change", function (e) {
+    if (e.target.id !== "la-donors") return;
+    state.donors = Number(e.target.value);
+    render();
+  });
+
+  document.getElementById("la-output").addEventListener("click", function (e) {
+    if (e.target.dataset.clear) { clearAll(); return; }
+    const row = e.target.closest(".la-row");
+    if (!row || e.target.closest("a")) return;
+    const detail = row.nextElementSibling;
+    if (detail) detail.hidden = !detail.hidden;
+  });
+
+  if (window.innerWidth < 992) {
+    const rail = root.querySelector(".la-rail details");
+    if (rail) rail.open = false;
+  }
+
+  renderStats();
+  render();
+})();
+</script>

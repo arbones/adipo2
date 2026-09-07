@@ -150,3 +150,653 @@ $btn-code-copy-color-active: $orange !default;
         border-radius: 4px;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Liver sc/sn/spatial catalog explorer (liver-atlas.qmd). Everything is scoped
+// under .liver-atlas so the rest of the site is untouched.
+// ---------------------------------------------------------------------------
+.liver-atlas {
+    --la-line: #{$gray-300};
+    --la-soft: #{$gray-100};
+    --la-mute: #{$gray-600};
+
+    font-size: 0.95rem;
+
+    .la-lede {
+        max-width: 62em;
+        color: $gray-700;
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+
+    // ---- headline numbers
+    .la-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        margin: 1.4rem 0 1.2rem;
+    }
+
+    .la-stat {
+        flex: 1 1 9rem;
+        padding: 0.7rem 0.9rem;
+        border: 1px solid var(--la-line);
+        border-left: 4px solid $teal;
+        border-radius: 5px;
+        background: $white;
+    }
+
+    .la-stat-n {
+        display: block;
+        font-size: 1.6rem;
+        font-weight: 700;
+        line-height: 1.1;
+        color: $teal;
+    }
+
+    .la-stat-l {
+        display: block;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--la-mute);
+    }
+
+    // ---- year histogram
+    .la-hist-wrap {
+        margin-bottom: 1.2rem;
+    }
+
+    .la-hist-head {
+        display: flex;
+        align-items: baseline;
+        gap: 0.6rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .la-section-label {
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $gray-700;
+    }
+
+    .la-hint {
+        font-size: 0.75rem;
+        color: var(--la-mute);
+    }
+
+    .la-hist {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 92px;
+    }
+
+    .la-bar {
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+
+        .la-bar-fill {
+            display: block;
+            width: 100%;
+            min-height: 2px;
+            border-radius: 3px 3px 0 0;
+            background: rgba($teal, 0.35);
+            transition: background 0.15s ease;
+        }
+
+        .la-bar-n {
+            font-size: 0.7rem;
+            color: var(--la-mute);
+            line-height: 1;
+        }
+
+        .la-bar-y {
+            font-size: 0.7rem;
+            color: var(--la-mute);
+            padding-top: 3px;
+        }
+
+        &:hover .la-bar-fill {
+            background: rgba($teal, 0.6);
+        }
+
+        &.is-on .la-bar-fill {
+            background: $orange;
+        }
+
+        &.is-on .la-bar-y {
+            color: $orange;
+            font-weight: 700;
+        }
+    }
+
+    // ---- toolbar
+    .la-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.7rem 0;
+        border-top: 1px solid var(--la-line);
+        border-bottom: 1px solid var(--la-line);
+    }
+
+    .la-search {
+        flex: 1 1 22rem;
+    }
+
+    .la-search input {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--la-line);
+        border-radius: 5px;
+        font-size: 0.95rem;
+
+        &:focus {
+            outline: 2px solid rgba($teal, 0.4);
+            border-color: $teal;
+        }
+    }
+
+    .la-toolbar-right {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .la-select {
+        font-size: 0.8rem;
+        color: var(--la-mute);
+
+        select {
+            margin-left: 0.3rem;
+            padding: 0.35rem 0.4rem;
+            border: 1px solid var(--la-line);
+            border-radius: 5px;
+            font-size: 0.85rem;
+            color: $gray-900;
+        }
+    }
+
+    .la-viewtoggle {
+        display: inline-flex;
+        border: 1px solid var(--la-line);
+        border-radius: 5px;
+        overflow: hidden;
+
+        button {
+            padding: 0.35rem 0.7rem;
+            border: 0;
+            background: $white;
+            font-size: 0.85rem;
+            color: $gray-700;
+            cursor: pointer;
+
+            &.is-active {
+                background: $teal;
+                color: $white;
+            }
+        }
+    }
+
+    .la-download {
+        padding: 0.35rem 0.75rem;
+        border: 1px solid $teal;
+        border-radius: 5px;
+        background: $white;
+        color: $teal;
+        font-size: 0.85rem;
+        cursor: pointer;
+
+        &:hover {
+            background: $teal;
+            color: $white;
+        }
+    }
+
+    // ---- layout
+    // Flexbox rather than grid: Quarto's page-columns CSS assigns a grid-column
+    // to content descendants, which would scatter the rail and the results into
+    // implicit tracks of a nested grid.
+    .la-body {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.6rem;
+        margin-top: 1.2rem;
+    }
+
+    .la-rail {
+        flex: 0 0 15rem;
+        position: sticky;
+        top: 1rem;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+
+    .la-rail-summary {
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $gray-700;
+        cursor: pointer;
+        margin-bottom: 0.6rem;
+    }
+
+    .la-facet {
+        margin-bottom: 1.1rem;
+
+        h4 {
+            margin: 0 0 0.35rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--la-mute);
+        }
+    }
+
+    .la-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .la-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 8px;
+        border: 1px solid var(--la-line);
+        border-radius: 999px;
+        background: $white;
+        font-size: 0.78rem;
+        color: $gray-800;
+        cursor: pointer;
+        line-height: 1.35;
+
+        &:hover:not(:disabled) {
+            border-color: $teal;
+            color: $teal;
+        }
+
+        &.is-on {
+            background: $teal;
+            border-color: $teal;
+            color: $white;
+        }
+
+        &:disabled {
+            opacity: 0.35;
+            cursor: default;
+        }
+    }
+
+    .la-chip-n {
+        font-size: 0.68rem;
+        opacity: 0.7;
+    }
+
+    .la-donor-select {
+        width: 100%;
+        padding: 0.3rem 0.4rem;
+        border: 1px solid var(--la-line);
+        border-radius: 5px;
+        font-size: 0.82rem;
+    }
+
+    .la-results {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .la-count-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.6rem;
+        margin-bottom: 0.9rem;
+        font-size: 0.88rem;
+        color: $gray-700;
+    }
+
+    .la-clear,
+    .la-linkish {
+        border: 0;
+        background: none;
+        padding: 0;
+        font-size: 0.82rem;
+        color: $teal;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    // ---- cards
+    .la-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
+        gap: 0.9rem;
+    }
+
+    .la-card {
+        display: flex;
+        flex-direction: column;
+        padding: 0.9rem 1rem 0.8rem;
+        border: 1px solid var(--la-line);
+        border-radius: 6px;
+        background: $white;
+        transition: box-shadow 0.15s ease, border-color 0.15s ease;
+
+        &:hover {
+            border-color: rgba($teal, 0.5);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        h3 {
+            margin: 0.15rem 0 0.25rem;
+            font-size: 0.98rem;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+    }
+
+    .la-card-meta {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .la-year {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: $teal;
+    }
+
+    .la-badge {
+        padding: 1px 6px;
+        border-radius: 3px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+
+    .la-badge-q1 { background: rgba($green, 0.14); color: $green; }
+    .la-badge-q2 { background: rgba($cyan, 0.16); color: darken($cyan, 12%); }
+    .la-badge-q3,
+    .la-badge-q4 { background: rgba($gray-600, 0.16); color: $gray-700; }
+    .la-badge-nr { background: var(--la-soft); color: var(--la-mute); }
+    .la-badge-prov { background: rgba($light-orange, 0.22); color: darken($orange, 8%); }
+
+    .la-authors {
+        margin: 0 0 0.5rem;
+        font-size: 0.8rem;
+        color: var(--la-mute);
+    }
+
+    .la-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 0.6rem;
+    }
+
+    .la-pill {
+        padding: 2px 7px;
+        border-radius: 3px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    .la-pill-sc { background: rgba($teal, 0.13); color: darken($teal, 5%); }
+    .la-pill-sn { background: rgba($purple, 0.11); color: $purple; }
+    .la-pill-sp { background: rgba($orange, 0.15); color: darken($orange, 10%); }
+    .la-pill-ctx { background: rgba($pink, 0.1); color: $pink; }
+    .la-pill-plat {
+        background: $white;
+        border: 1px solid var(--la-line);
+        color: $gray-700;
+        font-weight: 500;
+    }
+
+    .la-facts {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 2px 0.6rem;
+        margin: 0 0 0.6rem;
+        font-size: 0.8rem;
+
+        dt {
+            font-weight: 700;
+            color: var(--la-mute);
+            text-transform: uppercase;
+            font-size: 0.68rem;
+            padding-top: 2px;
+        }
+
+        dd {
+            margin: 0;
+            color: $gray-800;
+        }
+    }
+
+    .la-acc {
+        display: inline-block;
+        padding: 1px 6px;
+        margin: 0 3px 3px 0;
+        border: 1px solid rgba($teal, 0.4);
+        border-radius: 3px;
+        background: rgba($teal, 0.06);
+        font-family: $font-family-monospace;
+        font-size: 0.72rem;
+        color: $teal;
+
+        &:hover {
+            background: $teal;
+            color: $white;
+            text-decoration: none;
+        }
+    }
+
+    .la-muted {
+        color: var(--la-mute);
+    }
+
+    .la-details {
+        margin-top: auto;
+        border-top: 1px solid var(--la-line);
+        padding-top: 0.5rem;
+        font-size: 0.83rem;
+
+        summary {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: $teal;
+            cursor: pointer;
+        }
+
+        h4 {
+            margin: 0.7rem 0 0.2rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--la-mute);
+        }
+
+        p {
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 1.1rem;
+            line-height: 1.5;
+        }
+    }
+
+    .la-doi {
+        margin-top: 0.7rem !important;
+        font-size: 0.75rem;
+    }
+
+    // ---- table
+    .la-tablewrap {
+        overflow-x: auto;
+    }
+
+    .la-table {
+        width: 100%;
+        min-width: 44rem;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+
+        th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            padding: 0.45rem 0.55rem;
+            background: $teal;
+            color: $white;
+            text-align: left;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        td {
+            padding: 0.45rem 0.55rem;
+            border-bottom: 1px solid var(--la-line);
+            vertical-align: top;
+        }
+
+        .la-row {
+            cursor: pointer;
+
+            &:hover {
+                background: var(--la-soft);
+            }
+        }
+
+        .la-row-detail td {
+            background: var(--la-soft);
+            font-size: 0.8rem;
+        }
+
+        .la-authors {
+            margin: 0;
+            font-size: 0.72rem;
+        }
+    }
+
+    .la-dot {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: $light-orange;
+    }
+
+    .la-empty {
+        padding: 2.5rem 1rem;
+        text-align: center;
+        color: var(--la-mute);
+        background: var(--la-soft);
+        border-radius: 6px;
+    }
+
+    // ---- data dictionary
+    .la-dict {
+        margin-top: 1.6rem;
+
+        summary {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: $teal;
+            cursor: pointer;
+        }
+    }
+
+    .la-dict-table {
+        width: 100%;
+        margin-top: 0.7rem;
+        border-collapse: collapse;
+        font-size: 0.82rem;
+
+        th {
+            text-align: left;
+            vertical-align: top;
+            padding: 0.4rem 0.6rem 0.4rem 0;
+        }
+
+        thead th {
+            border-bottom: 2px solid $teal;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: $teal;
+        }
+
+        tbody th {
+            width: 15rem;
+            color: $gray-800;
+        }
+
+        td {
+            padding: 0.4rem 0.6rem 0.4rem 0;
+            border-bottom: 1px solid var(--la-line);
+            vertical-align: top;
+            color: $gray-700;
+        }
+
+        td:last-child {
+            width: 26rem;
+            color: var(--la-mute);
+            font-size: 0.78rem;
+        }
+    }
+
+    .la-foot {
+        margin-top: 1.8rem;
+        padding-top: 0.8rem;
+        border-top: 1px solid var(--la-line);
+        font-size: 0.78rem;
+        color: var(--la-mute);
+        max-width: 62em;
+    }
+
+    @media (max-width: map-get($grid-breakpoints, lg)) {
+        .la-body {
+            flex-direction: column;
+        }
+
+        .la-rail {
+            flex: 0 0 auto;
+            align-self: stretch;
+            position: static;
+            max-height: none;
+            border: 1px solid var(--la-line);
+            border-radius: 6px;
+            padding: 0.7rem 0.9rem;
+        }
+    }
+}

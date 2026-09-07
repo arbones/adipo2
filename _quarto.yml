@@ -16,7 +16,11 @@ website:
       - text: "Publications"
         href: pubs.qmd
       - text: "Knowledge Bases"
-        href: knowledge-bases.qmd
+        menu:
+          - text: "Curated databases"
+            href: knowledge-bases.qmd
+          - text: "Liver sc/sn/spatial catalog"
+            href: liver-atlas.qmd
       - text: "Crew"
         href: people/index.qmd
     
