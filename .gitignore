@@ -38,3 +38,6 @@ docs/CLAUDE.html
 npm-debug.log*
 
 **/*.quarto_ipynb
+
+# Lab member names used to bold authors in pubs.qmd (kept local)
+data/lab-members.json

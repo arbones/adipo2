@@ -11,6 +11,8 @@ execute:
 library(easyPubMed)
 library(xml2)
 library(stringr)
+library(purrr)
+library(jsonlite)
 
 # Define your query
 my_query <- "((Arbones-Mainar[Author] OR Lopez-Yus[Author] OR Casas-Deza[Author]) AND (2011:3000[dp])) OR ((Bernal-Monterde[Author]) AND (2020:3000[dp])) OR ( 40246043[PMID] OR 38876834[PMID] OR 40210079[PMID] OR 38403068[PMID] OR 37633519[PMID] OR 31203153[PMID])"
@@ -99,6 +101,32 @@ authors_str <- paste(names_vec, collapse = ", ")
 
 # Remove rows without a proper year
 results <- subset(results, !is.na(year) & year != "")
+
+# Lab members are bolded in the author lists. Their PubMed name forms live in
+# data/lab-members.json, which is kept out of git; without it nothing is bolded.
+# Names are compared without accents, case or hyphens, so "Arbonés Mainar JM"
+# and "Arbones-Mainar JM" are the same key.
+name_key <- function(x) {
+  stringi::stri_trans_general(x, "Latin-ASCII") |>
+    str_to_lower() |>
+    str_replace_all("[-\\s]+", " ") |>
+    str_trim()}
+
+member_file <- "data/lab-members.json"
+member_keys <- if (file.exists(member_file)) {
+  read_json(member_file)$members |>
+    map(\(m) unlist(m$pubmed_names)) |>
+    unlist() |>
+    name_key()
+} else character(0)
+
+bold_members <- function(authors) {
+  parts <- str_split_1(authors, fixed(", "))
+  hit <- name_key(parts) %in% member_keys
+  parts[hit] <- paste0("**", parts[hit], "**")
+  paste(parts, collapse = ", ")}
+
+results$authors <- map_chr(results$authors, bold_members)
 
 # Sort years in descending order
 unique_years <- sort(unique(results$year), decreasing = TRUE)
