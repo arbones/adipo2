@@ -842,3 +842,66 @@ $la-sp: darken($orange, 6%);
         }
     }
 }
+
+// ---- landing-page video
+// Same footprint as the picture it replaced: up to 600 px tall, centered,
+// shrinking with the window. The sound button sits in the bottom-right corner.
+.landing-video {
+    position: relative;
+    max-width: calc(600px * 16 / 9);
+    margin: 1.5rem auto 0;
+
+    video {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 6px;
+    }
+}
+
+.landing-sound {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    &:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+}
+
+// The former still picture stands in for the video when the visitor's system
+// asks for reduced motion.
+.landing-still {
+    display: none;
+    max-width: 100%;
+    max-height: 600px;
+    margin: 0 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .landing-video {
+        video,
+        .landing-sound {
+            display: none;
+        }
+
+        .landing-still {
+            display: block;
+        }
+    }
+}

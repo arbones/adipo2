@@ -49,6 +49,9 @@ website:
 project:
   type: website
   output-dir: docs
+  # Referenced only from a video poster attribute, which Quarto does not scan.
+  resources:
+    - img/adipofat-landing-poster.jpg
 
   preview: 
     port: 22222

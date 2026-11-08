@@ -44,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-2a6ff7b6502dc7e932e5a9507f2a651e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a49b55caa5d699fee24b7bd5a6371d7a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -161,7 +161,46 @@ ul.task-list li input[type="checkbox"] {
 <li>Our work aims to identify biomarkers and develop approaches for personalized medicine, addressing the challenges faced by obese patients and the professionals who care for them.</li>
 <li>We apply advanced omics technologies, including spatial omics, and AI tools, including large language models (LLMs), to improve our understanding and find practical solutions.</li>
 </ul>
-<p><img src="img/DALLe.png" class="" height="600"></p>
+<div class="landing-video">
+  <video id="landing-video" autoplay="" muted="" loop="" playsinline="" preload="auto" poster="img/adipofat-landing-poster.jpg" aria-label="AdipoFat lab video">
+    <source src="img/adipofat-landing.mp4" type="video/mp4">
+  </video>
+  <button type="button" id="landing-sound" class="landing-sound" aria-label="Unmute video" aria-pressed="false">
+    <i class="bi bi-volume-mute-fill"></i>
+  </button>
+  <img class="landing-still" src="img/DALLe.png" alt="AdipoFat lab illustration" loading="lazy">
+</div>
+
+<script>
+// Muted autoplay is the only kind browsers allow; the button turns sound on and off.
+// Visitors who ask for reduced motion get the still picture instead (see the CSS),
+// so the video is removed for them before it plays.
+(function () {
+  const video = document.getElementById("landing-video");
+  const button = document.getElementById("landing-sound");
+  const icon = button.querySelector("i");
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    video.pause();
+    video.remove();
+    button.remove();
+    return;
+  }
+
+  function sync() {
+    const on = !video.muted;
+    icon.className = on ? "bi bi-volume-up-fill" : "bi bi-volume-mute-fill";
+    button.setAttribute("aria-label", on ? "Mute video" : "Unmute video");
+    button.setAttribute("aria-pressed", String(on));
+  }
+
+  button.addEventListener("click", function () {
+    video.muted = !video.muted;
+    if (video.paused) video.play();
+    sync();
+  });
+})();
+</script>
 
 
 </section>
