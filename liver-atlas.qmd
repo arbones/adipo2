@@ -92,31 +92,50 @@ count_donors <- function(x) {
 ```{r}
 #| label: accession-helpers
 
-accession_rules <- tribble(
-  ~pattern,            ~base,
-  "GSE\\d{4,}",        "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=",
-  "PRJ[EDN][A-Z]\\d+", "https://www.ncbi.nlm.nih.gov/bioproject/",
-  "SR[PRXS]\\d{5,}",   "https://www.ncbi.nlm.nih.gov/sra/?term=",
-  "E-MTAB-\\d+",       "https://www.ebi.ac.uk/biostudies/arrayexpress/studies/",
-  "E-GEAD-\\d+",       "https://ddbj.nig.ac.jp/search/entry/gea/",
-  "S-BSST\\d+",        "https://www.ebi.ac.uk/biostudies/studies/",
-  "EGAS\\d{6,}",       "https://ega-archive.org/studies/",
-  "EGAD\\d{6,}",       "https://ega-archive.org/datasets/",
-  "EGAC\\d{6,}",       "https://ega-archive.org/dacs/",
-  "HRA\\d{6}",         "https://ngdc.cncb.ac.cn/gsa-human/browse/",
-  "OMIX\\d{6}",        "https://ngdc.cncb.ac.cn/omix/release/",
-  "PXD\\d{6}",         "https://www.ebi.ac.uk/pride/archive/projects/",
-  "DR[RAX]\\d{5,}",    "https://ddbj.nig.ac.jp/search/entry/sra-run/")
+# Most repositories use upper-case IDs, so matches are upper-cased to repair typos
+# such as "GSe210679". dbGaP and HCA IDs are lower case and must stay that way.
+# HCA projects and CELLxGENE collections are bare UUIDs, so each is only taken
+# when the text names its repository.
+uuid <- "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+hca_project <- paste0("(?<=HCA[^:]{0,20}: )", uuid)
+cellxgene_collection <- paste0("(?<=CELLxGENE[^:]{0,20}: )", uuid)
 
-match_rule <- function(txt, pattern, base) {
-  ids <- str_extract_all(txt, regex(pattern, ignore_case = TRUE))[[1]] |> toupper() |> unique()
+accession_rules <- tribble(
+  ~pattern,            ~base,                                                  ~upper,
+  "GSE\\d{4,}",        "https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=",   TRUE,
+  "PRJ[EDN][A-Z]\\d+", "https://www.ncbi.nlm.nih.gov/bioproject/",              TRUE,
+  "SR[PRXS]\\d{5,}",   "https://www.ncbi.nlm.nih.gov/sra/?term=",               TRUE,
+  "E-MTAB-\\d+",       "https://www.ebi.ac.uk/biostudies/arrayexpress/studies/", TRUE,
+  "E-GEAD-\\d+",       "https://ddbj.nig.ac.jp/search/entry/gea/",              TRUE,
+  "S-BSST\\d+",        "https://www.ebi.ac.uk/biostudies/studies/",             TRUE,
+  "EGAS\\d{6,}",       "https://ega-archive.org/studies/",                      TRUE,
+  "EGAD\\d{6,}",       "https://ega-archive.org/datasets/",                     TRUE,
+  "EGAC\\d{6,}",       "https://ega-archive.org/dacs/",                         TRUE,
+  "HRA\\d{6}",         "https://ngdc.cncb.ac.cn/gsa-human/browse/",             TRUE,
+  "OMIX\\d{6}",        "https://ngdc.cncb.ac.cn/omix/release/",                 TRUE,
+  "PXD\\d{6}",         "https://www.ebi.ac.uk/pride/archive/projects/",         TRUE,
+  "DR[RAX]\\d{5,}",    "https://ddbj.nig.ac.jp/search/entry/sra-run/",          TRUE,
+  "CRA\\d{6}",         "https://ngdc.cncb.ac.cn/gsa/browse/",                   TRUE,
+  "PRJCA\\d+",         "https://ngdc.cncb.ac.cn/bioproject/browse/",            TRUE,
+  "CNP\\d{7}",         "https://db.cngb.org/search/project/",                   TRUE,
+  "JGAS\\d{6}",        "https://ddbj.nig.ac.jp/search/entry/jga-study/",        TRUE,
+  "OEP\\d{6}",         "https://www.biosino.org/node/project/detail/",          TRUE,
+  "SCP\\d{3,}",        "https://singlecell.broadinstitute.org/single_cell/study/", TRUE,
+  cellxgene_collection, "https://cellxgene.cziscience.com/collections/",        FALSE,
+  "phs\\d{6}",         "https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=", FALSE,
+  hca_project,         "https://data.humancellatlas.org/explore/projects/",     FALSE)
+
+match_rule <- function(txt, pattern, base, upper) {
+  ids <- str_extract_all(txt, regex(pattern, ignore_case = TRUE))[[1]]
+  ids <- unique(if (upper) toupper(ids) else tolower(ids))
   tibble(label = ids, url = paste0(base, ids))}
 
 # Accessions are matched on the URL-stripped text so an ID quoted inside its own
 # repository link is not counted twice.
 find_accessions <- function(txt) {
   bare <- str_remove_all(txt, "https?://\\S+")
-  map2(accession_rules$pattern, accession_rules$base, \(p, b) match_rule(bare, p, b)) |>
+  accession_rules |>
+    pmap(\(pattern, base, upper) match_rule(bare, pattern, base, upper)) |>
     list_rbind()}
 
 find_dois <- function(txt) {
@@ -133,7 +152,7 @@ find_urls <- function(txt, known) {
   tibble(label = str_remove(urls, "^https?://(www\\.)?") |> str_extract("^[^/]+"), url = urls)}
 
 data_links <- function(txt) {
-  if (is.na(txt) || !str_starts(txt, "Yes")) return(tibble(label = character(), url = character()))
+  if (is.na(txt) || !str_starts(txt, "Yes|Controlled")) return(tibble(label = character(), url = character()))
   acc <- find_accessions(txt)
   out <- bind_rows(acc, find_dois(txt), find_urls(txt, acc$label))
   distinct(out, url, .keep_all = TRUE)}
@@ -166,6 +185,7 @@ records <- raw |>
     donors_text  = `Human Liver Individuals Profiled`,
     donors_n     = map_int(`Human Liver Individuals Profiled`, count_donors),
     data_status  = case_when(str_starts(`Public Data Availability`, "Yes") ~ "Yes",
+                             str_starts(`Public Data Availability`, "Controlled") ~ "Controlled",
                              str_starts(`Public Data Availability`, "No public") ~ "No",
                              .default = "Unknown"),
     data_raw     = `Public Data Availability`,
@@ -192,13 +212,21 @@ cat("\n\n")
       Human liver <span class="la-h1-sc">sc</span><span class="la-h1-slash">/</span><span class="la-h1-sn">sn</span><span class="la-h1-slash">/</span><span class="la-h1-sp">spatial</span> catalog
     </h1>
     <p class="la-lede">
-      Who has already sequenced the human liver, and what did they leave behind for you to
-      reuse? Every study here profiled <strong>human liver</strong> material by single-cell,
-      single-nucleus or spatial transcriptomics, all screened against one set of eligibility
-      rules. Disease context, cohort size, spatial platform and public accessions were pulled
-      out field by field, so you can filter your way to the right dataset instead of reading
-      every abstract yourself. Bulk RNA-seq, scATAC-seq and validation-only FISH or IHC do not
-      qualify.
+      Before you plan a single-cell or spatial study of the liver, it helps to know who has
+      already done one and whether their data are out there to reuse. That is what this list
+      is for.
+    </p>
+    <p class="la-lede">
+      Every study here produced its own data from <strong>human liver</strong> tissue, using
+      single-cell, single-nucleus or spatial transcriptomics. Papers that only reanalyzed
+      public data are left out. So are bulk RNA-seq, scATAC-seq on its own, and FISH or IHC
+      used only to confirm a result.
+    </p>
+    <p class="la-lede">
+      For each study we noted the disease, how many people were sampled, the spatial
+      platform, and where the data are kept: open to download, behind an access request, or
+      not deposited at all. We checked these against the paper and the repository. Filter
+      down to what you need, then open a card for the details.
     </p>
   </header>
 

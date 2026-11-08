@@ -27,6 +27,7 @@
 
   const DATA_LABEL = {
     Yes: "Deposited",
+    Controlled: "Controlled access",
     No: "None stated",
     Unknown: "Not established"
   };
@@ -125,7 +126,10 @@
 
   function dataCell(r) {
     if (r.links.length) {
-      return r.links.map(function (l) {
+      const prefix = r.data_status === "Controlled"
+        ? '<span class="la-muted">' + esc(r.dataLabel) + ":</span> "
+        : "";
+      return prefix + r.links.map(function (l) {
         return link(l.url, l.label, "la-acc");
       }).join(" ");
     }
